@@ -1,0 +1,116 @@
+/* =====================================================================
+   theme.css — light mode. Loaded last; only applies with
+   <html data-theme="light">. Dark stays the default.
+   Rule: pages and cards go light; anything that shows the SKY (player,
+   big view, sky map, atlas, survey thumbnails) stays dark, because
+   astronomical images are measured light on a black sky.
+   ===================================================================== */
+
+/* the toggle button itself (both themes) */
+.theme-toggle { width: 38px; padding: 0 !important; display: inline-flex; align-items: center; justify-content: center; font-size: 1.05rem; }
+html { transition: background-color .25s; }
+body, .card, .console, .nav, .search-bar { transition: background-color .25s, color .25s, border-color .25s; }
+
+html[data-theme="light"] {
+  color-scheme: light;
+  --paper: #f5f3ee; --paper-2: #ffffff;
+  --ink: #18202f; --ink-2: #3a4456; --muted: #5b6476;
+  --line: rgba(24, 32, 47, .16); --on-light: #0c1424;
+  --lav: #dfe6fd; --lav-2: #4d6bd6;
+  --hi: #13804f; --mint: #2fb57a; --mint-2: #17804f;
+  --sky-1: #bcd8f2; --sky-2: #d9e9f8; --sky-3: #eef5fc; --sky-line: rgba(40, 90, 160, .35);
+  --rust: #cf4f2d; --warn: #9a5c12; --error: #c23b2c; --ok: #157a4b;
+  --c-bg: #f5f3ee; --c-raise: rgba(255, 255, 255, .78);
+  --c-line: rgba(24, 32, 47, .10); --c-line-2: rgba(24, 32, 47, .20);
+  --c-ink-3: #566073; --c-warm: #a8661a; --c-cool: #2a63c4; --c-gaia: #0b86b8;
+  --tg-moves: #4d6bd6; --tg-pulses: #8f6216; --tg-dims: #cf4f2d; --tg-flares: #c2457d; --tg-exploded: #1f8fb0;
+  --g-view: #2a63c4; --g-analyse: #1f9a62; --g-3d: #7a4fd0; --g-save: #b0701a;
+}
+
+/* ---------- page surfaces ---------- */
+html[data-theme="light"] body { background: radial-gradient(900px 600px at 10% -10%, rgba(120, 160, 230, .22), transparent 70%), var(--paper) fixed; color: var(--ink); }
+html[data-theme="light"] .footer { background: #ebe8e0; }
+html[data-theme="light"] .card, html[data-theme="light"] .results .card { background: rgba(255, 255, 255, .8); box-shadow: 0 1px 2px rgba(24, 32, 47, .04); }
+html[data-theme="light"] .console { background: rgba(255, 255, 255, .7); box-shadow: 0 10px 40px rgba(24, 32, 47, .06); }
+html[data-theme="light"] .console input:not([type=checkbox]), html[data-theme="light"] .console select,
+html[data-theme="light"] .probe-form input:not([type=checkbox]), html[data-theme="light"] .probe-form select,
+html[data-theme="light"] .mode-ctrl select, html[data-theme="light"] .atlas-actions select, html[data-theme="light"] .transport select,
+html[data-theme="light"] .flag-pop select, html[data-theme="light"] .flag-pop input, html[data-theme="light"] .trail-top input[type=number] {
+  background: #fff; color: var(--ink); }
+html[data-theme="light"] .console .search, html[data-theme="light"] .qbtn, html[data-theme="light"] .console .chips .chip,
+html[data-theme="light"] .go-card, html[data-theme="light"] .d-grid > div, html[data-theme="light"] .jbtn, html[data-theme="light"] .jsel,
+html[data-theme="light"] .outline-btn, html[data-theme="light"] .report, html[data-theme="light"] .tool-stage .feat-panel,
+html[data-theme="light"] .tcard, html[data-theme="light"] .bchip { background: #fff; }
+html[data-theme="light"] .console .chips .chip.on, html[data-theme="light"] .chip.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+html[data-theme="light"] .modes button.on::after { background: var(--hi); }
+html[data-theme="light"] .uflags { background: rgba(207, 79, 45, .05); }
+
+/* floating panels: light cards with a soft shadow */
+html[data-theme="light"] .star-tip, html[data-theme="light"] .flag-pop, html[data-theme="light"] .sb-sum .sum-more > dl,
+html[data-theme="light"] .story-card, html[data-theme="light"] .keys-box {
+  background: #fff; color: var(--ink); border-color: var(--c-line-2); box-shadow: 0 18px 50px rgba(24, 32, 47, .18); }
+html[data-theme="light"] .story-card { border-color: color-mix(in srgb, var(--hi) 45%, transparent); }
+html[data-theme="light"] .keys-modal { background: rgba(24, 32, 47, .35); }
+html[data-theme="light"] kbd { background: #f3f1ec; }
+
+/* Star Vault orbit */
+html[data-theme="light"] .orbit-core { background: radial-gradient(closest-side, #fff 72%, rgba(255, 255, 255, .7)); box-shadow: 0 10px 40px rgba(24, 32, 47, .08); }
+html[data-theme="light"] .orbit-track { background: radial-gradient(closest-side, rgba(120, 160, 230, .16), transparent 75%); }
+html[data-theme="light"] .orbit-step { background: #fff; }
+html[data-theme="light"] .obtn span { text-shadow: none; }
+html[data-theme="light"] .obtn i { box-shadow: 0 0 0 3px #fff, 0 0 10px var(--dot); }
+html[data-theme="light"] .obtn.on i { box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--dot), 0 0 18px var(--dot); }
+html[data-theme="light"] .t-challenge { --dot: #23a56d; } html[data-theme="light"] .t-moves { --dot: #4d6bd6; }
+html[data-theme="light"] .t-varies { --dot: #cf4f2d; } html[data-theme="light"] .t-exploded { --dot: #1f8fb0; }
+
+/* home page cards */
+html[data-theme="light"] .tcard, html[data-theme="light"] .carousel .card { color: var(--ink); }
+html[data-theme="light"] [class*="c-card"], html[data-theme="light"] .fcard { background: linear-gradient(180deg, #ffffff, #f4f2ec); }
+html[data-theme="light"] .try-hud { background: rgba(5, 10, 20, .72); color: #e9eef7; }   /* sits on the dark sky */
+
+/* ---------- the sky stays dark ---------- */
+html[data-theme="light"] .stage, html[data-theme="light"] .skymap, html[data-theme="light"] .atlas .aladin,
+html[data-theme="light"] .d-head, html[data-theme="light"] .c-art, html[data-theme="light"] .gcell button, html[data-theme="light"] .try-stage {
+  --ink: #ece9df; --ink-2: #c3c9d5; --muted: #8f99ab; }
+html[data-theme="light"] .stage:not(.theatre) { background: #0a1120; border-color: transparent; }
+html[data-theme="light"] .stage .hud { background: rgba(5, 10, 20, .72); color: #e9eef7; }
+html[data-theme="light"] .stage-expand { color: #e9eef7; }
+/* the big view keeps its dark controls */
+html[data-theme="light"] .stage.theatre .theatre-bar, html[data-theme="light"] .stage.theatre .overlays .pill-toggle span {
+  --ink: #ece9df; --paper: #0c1424; --c-ink-3: #a9b2c2; --c-line-2: rgba(236, 233, 223, .18); color: #c3c9d5; }
+html[data-theme="light"] .stage.theatre .theatre-bar .btn { color: #ece9df; border-color: rgba(236, 233, 223, .25); }
+html[data-theme="light"] .stage.theatre .theatre-bar .btn.primary { background: #ece9df; color: #0c1424; }
+html[data-theme="light"] .atlas .aladin.atlas-idle { background: radial-gradient(400px 160px at 50% 50%, rgba(56, 86, 170, .25), transparent 70%), #0a1120; }
+
+/* buttons */
+html[data-theme="light"] .btn.ghost { color: var(--ink); }
+html[data-theme="light"] .go-btn { color: #062016; }
+html[data-theme="light"] .band-rec-btn { color: #1a7f54; }
+html[data-theme="light"] .pill-toggle input:checked + span { color: #fff; }
+html[data-theme="light"] #show-labels:checked + span { background: var(--ink); border-color: var(--ink); color: #fff; }
+html[data-theme="light"] .tool-open .tcard.on .tc-ico { stroke: #fff; }
+html[data-theme="light"] .trust-list .t-warn span { color: #8a5310; }
+html[data-theme="light"] .mode-hint.warn, html[data-theme="light"] .warn, html[data-theme="light"] .tc-off { color: #9a5c12; }
+html[data-theme="light"] .tool-off b { color: #9a5c12; }
+
+/* ---------- text contrast fixes (light mode): green/blue/lavender used as TEXT were too pale on cream ---------- */
+html[data-theme="light"] .d-ic { color: #17804f; }
+html[data-theme="light"] .probe-ic { color: #2a63c4; }
+html[data-theme="light"] #c-angle, html[data-theme="light"] .jbtn.on, html[data-theme="light"] .d-facts > .mono { color: #17804f; }
+html[data-theme="light"] .jbtn.on { border-color: #17804f; }
+
+/* colour words in tool explanations that name a line on a plot */
+.kc-cyan { color: #39d0ff; } .kc-amber { color: #ffb000; } .kc-violet { color: #b48cff; }
+html[data-theme="light"] .kc-cyan { color: #0a78a3; } html[data-theme="light"] .kc-amber { color: #9a6200; } html[data-theme="light"] .kc-violet { color: #6a44c4; }
+.kc-cyan, .kc-amber, .kc-violet { font-weight: 700; }
+/* --hi is a darker green in light mode (readable as text); text placed ON a --hi fill turns white */
+html[data-theme="light"] .btn.on, html[data-theme="light"] .door-row:hover, html[data-theme="light"] .spec-features .feat:hover,
+html[data-theme="light"] .tag.warn, html[data-theme="light"] ::selection { color: #fff; }
+/* primary buttons: dark fill + light text; hover used to turn the fill WHITE while the text stayed cream (invisible) */
+html[data-theme="light"] .btn.primary:hover { background: #2a3346; color: #fff; border-color: #2a3346; }
+html[data-theme="light"] #launch .btn.primary { color: #fff; }
+html[data-theme="light"] #launch .btn.primary:hover { background: #0f6b41; border-color: #0f6b41; }
+html[data-theme="light"] .outline-btn:hover { color: #2a63c4; border-color: #2a63c4; }
+html[data-theme="light"] #door-probe .arrows li::before { color: #2a63c4; }
+html[data-theme="light"] .arrows li::before { color: #17804f; }
+html[data-theme="light"] .badge-sim { border-color: rgba(143, 98, 22, .45); }

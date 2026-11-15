@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f3ee">
+<script>(function(){var t="light";try{if(localStorage.getItem("orbital.theme")==="dark")t="dark"}catch(e){}document.documentElement.dataset.theme=t})()</script>
+
+<title>Sky Probe • ORBITAL</title>
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Caveat:wght@600;700&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400..800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/calm.css">
+<link rel="stylesheet" href="css/theme.css">
+<!-- Aladin Lite 3.8.2 (CDS Strasbourg, LGPL-3.0), shipped with the site: CDS removed the old
+     api/v3/latest address in Nov 2026, so we never depend on a URL we don't control. -->
+<script type="module">
+  import A from "./vendor/aladin-lite-3.8.2.js";
+  window.A = A;
+  window.dispatchEvent(new Event("aladin-ready"));
+</script>
+<link rel="stylesheet" href="css/tutorial.css">
+</head>
+<body data-page="probe">
+
+<header class="nav">
+  <a class="brand" href="index.html"><span data-k="brand"></span>.</a>
+  <nav class="links" id="nav-links"></nav>
+  <div class="nav-right">
+  </div>
+</header>
+
+<main class="app">
+  <div class="sec-head">
+    <div class="sec-label">⌖ // <span data-k="portals.probe.name"></span></div>
+    <h2 data-k="portals.probe.tagline"></h2>
+    <p class="mono status" id="backend-status"></p>
+  </div>
+
+  <!-- After Load images the form folds away and this one-line bar stands in for it. -->
+  <div class="search-bar" id="search-bar" hidden>
+    <div class="sb-sum" id="summary"></div>
+    <div class="sb-actions">
+      <button class="btn sm primary" id="story-btn" type="button" title="Key: S">▶ Story mode</button>
+      <button class="btn sm ghost icon-only" id="keys-btn" type="button" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts">⌨</button>
+      <button class="btn sm ghost" id="copy-link" type="button" title="Copy a link that reopens exactly this view">Copy link</button>
+      <button class="btn sm ghost" id="search-edit" type="button" aria-controls="controls" aria-expanded="false">Change search</button>
+    </div>
+  </div>
+
+  <form class="console probe-form" id="controls" autocomplete="off" novalidate>
+    <div class="console-left">
+      <!-- row 1: what to look at -->
+      <div class="pf-row pf-where pf-where2">
+        <label class="field"><span class="field-k">RA <small>deg or 08h55m10.8s</small></span><input id="ra" placeholder="143.5711"></label>
+        <label class="field"><span class="field-k">Dec <small>deg or −07d14m42.5s</small></span><input id="dec" placeholder="+45.711"></label>
+      </div>
+      <!-- row 2: how to look -->
+      <div class="pf-row pf-how">
+        <label class="field"><span class="field-k">Band</span><select id="band"></select></label>
+        <label class="field"><span class="field-k" title="Radius in degrees, up to 0.25 (0.08° = 4.8′)">Radius °</span><input id="radius" data-unit="deg" type="number" step="0.005" min="0.005" max="0.25" value="0.08"></label>
+        <div class="field"><span class="field-k has-info"><label for="max-exp">Exposures</label><button class="info-i" type="button" aria-label="What does Exposures mean?" aria-expanded="false">i</button><span class="info-pop" role="tooltip" hidden><b>Exposures</b> = how many SPHEREx images to load, picked evenly across your dates. <b>24</b> is the default and fastest. More images show finer changes over time but take longer, because each one is downloaded from NASA&rsquo;s archive. Pick <b>All</b> for short date windows, such as an asteroid over 2&ndash;3 days. Changing it never changes the science, only how many frames you see.</span></span>
+          <select id="max-exp" aria-describedby="max-exp-help">
+            <option value="24" selected>24 · fastest</option>
+            <option value="48">48</option>
+            <option value="96">96 · slower</option>
+            <option value="all">All (≤ 400) · slowest</option>
+          </select></div>
+        <div class="field pf-time">
+          <span class="field-k">Dates</span>
+          <div class="time-row">
+            <label class="toggle"><input type="checkbox" id="all-time" checked> All</label>
+            <input id="t-start" type="date" disabled aria-label="From date">
+            <input id="t-end" type="date" disabled aria-label="To date">
+            <button class="btn sm ghost band-rec-btn" id="band-rec" type="button" aria-haspopup="dialog">✦ Which band?</button>
+          </div>
+        </div>
+      </div>
+      <details class="fold-inline" id="motion-fold">
+        <summary>Moving object? Add its motion <span class="muted">(optional)</span></summary>
+        <div class="pf-row pf-motion">
+          <label class="field"><span class="field-k">East, mas/yr</span><input id="pm-east" type="number" step="any" value="0" inputmode="decimal"></label>
+          <label class="field"><span class="field-k">North, mas/yr</span><input id="pm-north" type="number" step="any" value="0" inputmode="decimal"></label>
+          <label class="field"><span class="field-k">Position year</span><input id="epoch" type="number" step="any" min="1900" max="2100" value="2000"></label>
+        </div>
+        <p class="muted field-help"><b>Proper motion</b> is an object's steady drift across the sky, in milliarcseconds per year
+          (1 mas = 1/3 600 000 of a degree). Leave 0 for things that don't move. The year is when your RA/Dec were true (catalogues usually say 2000).</p>
+      </details>
+      <div class="pf-check">
+        <div class="valid-box" id="coord-echo">Type a position, pick a target, or click the sky map.</div>
+        <p class="note-warn" id="pm-note">Any coordinates are allowed, but SPHEREx may not have imaged every spot yet.</p>
+      </div>
+    </div>
+
+    <div class="console-right">
+      <div class="map-card">
+        <div class="map-head"><b>Sky map</b><button class="icon-btn" id="map-toggle" type="button" aria-expanded="true" aria-label="Collapse sky map">−</button></div>
+        <div id="map-body">
+          <div class="skymap" id="skymap"></div>
+          <p class="muted map-cap"><span class="lg lg-challenge">NASA challenge</span> <span class="lg lg-moves">moves</span> <span class="lg lg-varies">varies</span> <span class="lg lg-exploded">exploded</span> <span class="lg lg-deep">deep field</span> <span class="lg lg-ast">asteroid</span> · click a dot to pick it</p>
+        </div>
+        <label class="field pf-name"><span class="field-k">Predefined targets</span>
+          <select id="name"><option value="">Type coordinates</option></select></label>
+      </div>
+      <div class="go-card">
+        <div>
+          <span class="field-k">Sky Probe position</span>
+          <h3 id="sel-name">Custom position</h3>
+          <div class="mono go-coords" id="sel-coords">—</div>
+        </div>
+        <button class="btn go-btn" id="load-btn" type="submit">Load images ↗</button>
+        <button class="btn ghost cancel-btn" id="cancel-btn" type="button" hidden>✕ Cancel search</button>
+        <p class="status" id="status"></p>
+      </div>
+    </div>
+  </form>
+
+  <!-- ===== RESULTS (appears after Load images) =====
+       One player, four ways to look ("dials"), an honesty card, and everything else folded away. -->
+  <section class="results" id="results" hidden>
+
+    <div class="results-grid">
+      <div class="card player-card">
+        <div class="modes" id="modes" role="tablist" aria-label="How to look at the frames">
+          <button type="button" role="tab" data-mode="time" class="on">Time</button>
+          <button type="button" role="tab" data-mode="colour">Colour</button>
+          <button type="button" role="tab" data-mode="mission">Mission</button>
+          <button type="button" role="tab" data-mode="compare">Compare</button>
+          <button type="button" role="tab" data-mode="trail">Trail</button>
+          <button type="button" role="tab" data-mode="grid">Grid</button>
+        </div>
+        <p class="mode-hint" id="mode-hint" role="note"></p>
+
+        <div class="mode-ctrl" id="ctrl-time">
+          <label class="toggle"><input type="checkbox" id="same-colour"> Same colour only</label>
+        </div>
+        <div class="mode-ctrl" id="ctrl-colour" hidden>
+          <label>Visit <select id="colour-visit"></select></label>
+          <button class="btn sm ghost" id="colour-all" type="button">All 6 detectors in one picture</button>
+          <p class="status" id="colour-status"></p>
+          <div class="colour-key" id="colour-key"></div>
+        </div>
+        <div class="mode-ctrl" id="ctrl-mission" hidden>
+          <span class="muted" id="mission-status"></span>
+          <div class="mission-tools" id="mission-tools">
+            <button class="btn sm primary" id="lb-wise" type="button" title="Key: L">⇄ Blink WISE 2010 ↔ SPHEREx</button>
+            <button class="btn sm ghost" id="lb-2mass" type="button">⇄ Blink 2MASS 1999 ↔ SPHEREx</button>
+            <button class="btn sm ghost" id="mm-start" type="button" title="Key: M">📏 Measure the motion</button>
+          </div>
+          <p class="mm-status" id="mm-status"></p>
+        </div>
+        <div class="mode-ctrl trail-ctrl" id="ctrl-trail" hidden>
+          <div class="trail-top">
+            <label>Group <select id="trail-group">
+              <option value="visit">by visit</option>
+              <option value="day">by day</option>
+              <option value="frame">every exposure</option>
+            </select></label>
+            <label>Use <input id="trail-n" type="number" min="2" max="40" value="6" inputmode="numeric"> evenly spaced</label>
+            <button class="btn sm ghost" id="trail-all" type="button">All</button>
+            <button class="btn sm ghost" id="trail-none" type="button">None</button>
+            <label class="toggle"><input type="checkbox" id="trail-old"> Add 2MASS + WISE (1999, 2010)</label>
+          </div>
+          <div class="trail-list" id="trail-list"></div>
+          <p class="status" id="trail-status"></p>
+        </div>
+        <div class="mode-ctrl grid-ctrl" id="ctrl-grid" hidden>
+          <div class="grid-top">
+            <span class="seg" role="group" aria-label="Which detectors">
+              <button class="btn sm primary" id="grid-one" type="button">This detector</button>
+              <button class="btn sm ghost" id="grid-six" type="button">All 6 detectors</button>
+            </span>
+            <span class="muted grid-how">Across a row: one date, changing colour. Down a column: one colour, changing date.
+              Click a row or a column to play it.</span>
+          </div>
+          <p class="status" id="grid-status"></p>
+          <div class="grid-view" id="grid-view"></div>
+        </div>
+        <div class="mode-ctrl compare-ctrl" id="ctrl-compare" hidden>
+          <label>A <select id="blink-a" disabled></select></label>
+          <label>B <select id="blink-b" disabled></select></label>
+          <span class="seg" role="group" aria-label="Compare how">
+            <button class="btn sm primary" id="blink-btn" type="button" disabled>Blink</button>
+            <button class="btn sm ghost" id="subtract-btn" type="button" disabled>Subtract</button>
+          </span>
+          <p class="status" id="blink-status"></p>
+        </div>
+
+        <div class="stage">
+          <canvas id="player" width="560" height="560"></canvas>
+          <div class="hud mono" id="hud">—</div>
+          <button class="stage-expand" id="stage-expand" type="button" title="Big view (pops out while playing)" aria-label="Open big view">⤢</button>
+          <div class="theatre-bar" id="theatre-bar">
+            <button class="btn sm primary" id="th-play" type="button">▶ Play</button>
+            <button class="btn sm ghost" id="th-prev" type="button" aria-label="Previous frame">←</button>
+            <button class="btn sm ghost" id="th-next" type="button" aria-label="Next frame">→</button>
+            <span class="mono th-count" id="th-count"></span>
+            <label class="toggle th-auto"><input type="checkbox" id="th-auto" checked> Pop out when playing</label>
+            <button class="btn sm ghost" id="th-close" type="button" aria-label="Close big view">✕ Close <kbd>Esc</kbd></button>
+          </div>
+          <div class="star-tip" id="star-tip" hidden></div>
+          <form class="flag-pop" id="flag-pop" hidden>
+            <b>Flag this spot</b>
+            <select id="flag-type">
+              <option value="mover">Possible mover</option>
+              <option value="variable">Brightness change</option>
+              <option value="nogaia">Bright, but no Gaia star</option>
+              <option value="artefact">Artefact (not real)</option>
+              <option value="known">Known object</option>
+              <option value="other">Other</option>
+            </select>
+            <input id="flag-note" placeholder="Note (optional)" maxlength="200">
+            <div><button class="btn sm primary" type="submit">Save flag</button> <button class="btn sm ghost" type="button" id="flag-cancel">Cancel</button></div>
+          </form>
+        </div>
+
+        <div class="transport">
+          <button class="btn sm primary" id="play" type="button">▶ Auto play</button>
+          <button class="btn sm ghost" id="prev" type="button" aria-label="Previous frame">←</button>
+          <button class="btn sm ghost" id="next" type="button" aria-label="Next frame">→</button>
+          <label class="speed">Speed <select id="fps" aria-label="Frames per second"></select></label>
+        </div>
+        <div class="frame-dots" id="dots" aria-label="Frames"></div>
+
+        <div class="overlays" aria-label="Draw on top of the image">
+          <label class="pill-toggle"><input type="checkbox" id="show-gaia"><span>Gaia stars</span></label>
+          <label class="pill-toggle"><input type="checkbox" id="show-marker"><span>Predicted position</span></label>
+          <label class="pill-toggle"><input type="checkbox" id="show-missing"><span>Missing data</span></label>
+          <label class="pill-toggle"><input type="checkbox" id="show-sso"><span>Known asteroids</span></label>
+          <label class="pill-toggle"><input type="checkbox" id="flag-mode"><span>Flag objects</span></label>
+          <label class="pill-toggle"><input type="checkbox" id="show-labels" checked><span>Frame labels</span></label>
+          <small class="muted" id="gaia-status"></small>
+        </div>
+      </div>
+
+      <aside class="side-col">
+        <div class="card trust" id="trust" aria-live="polite"></div>
+        <div class="card irsa-card">
+          <div class="trust-head">Check it at NASA/IRSA</div>
+          <p class="muted irsa-help">Opens NASA/IRSA's own tools for this spot (<span class="mono" id="irsa-pos">—</span>), filled in for you where IRSA allows it.</p>
+          <div class="irsa-links">
+            <button class="btn sm ghost" type="button" data-irsa="spherex_explorer">Every SPHEREx image here ↗<small>SPHEREx Data Explorer · opens with the search already run</small></button>
+            <button class="btn sm ghost" type="button" data-irsa="most">Is it in our solar system? ↗<small>Moving Object Search · filled with any known asteroid here</small></button>
+            <button class="btn sm ghost" type="button" data-irsa="spectrophotometry">Measure its spectrum properly ↗<small>Spectrophotometry Tool · step-by-step, IRSA can’t be pre-filled</small></button>
+          </div>
+          <small class="muted" id="irsa-copied"></small>
+        </div>
+        <details class="card fold flags-card" id="flags-card">
+          <summary>Your flags <span class="muted" id="flags-count">(0)</span></summary>
+          <p class="muted flags-help">Switch on <b>Flag objects</b> under the picture, then click anything that looks interesting.
+            Flags stay on this computer, on every frame, and can be exported.</p>
+          <ol class="flags-list" id="flags-list"></ol>
+          <div class="flags-actions">
+            <button class="btn sm ghost" id="flags-csv" type="button">Download CSV</button>
+            <button class="btn sm ghost" id="flags-copy" type="button">Copy report</button>
+          </div>
+        </details>
+        <details class="card fold">
+          <summary>This frame</summary>
+          <table class="kv" id="frame-info"></table>
+        </details>
+        <details class="card fold notes" id="notes" hidden><summary id="notes-sum">Notes</summary><ul class="warnings" id="warnings"></ul></details>
+      </aside>
+    </div>
+
+    <section class="card atlas" id="atlas">
+      <div class="atlas-head">
+        <div><b>Where in the sky</b>
+          <span class="muted">This patch in older sky surveys. A fast star sits at its old position there.</span></div>
+        <div class="atlas-actions">
+          <select id="survey" aria-label="Background survey">
+            <option value="2mass">2MASS colour · 1.2–2.2 µm · 1997–2001</option>
+            <option value="allwise">AllWISE colour · 3.4–12 µm · 2010–11</option>
+            <option value="dss">DSS2 colour · visible light · 1950s–90s</option>
+          </select>
+          <button class="btn sm ghost" id="atlas-fly" type="button" disabled>Fly in from the whole sky</button>
+        </div>
+      </div>
+      <div class="aladin atlas-idle" id="aladin-view">
+        <button class="btn primary" id="atlas-open" type="button">Open the sky atlas</button>
+        <small class="muted">Sky images come from public mirrors (CSIRO Australia, ESA); usually a second or two.</small>
+      </div>
+      <small class="muted" id="aladin-msg">Drag to pan, scroll to zoom. The cyan circle is the SPHEREx patch; the dashed square is the exact picture above.</small>
+    </section>
+
+    <section class="card more toolbox" id="more-tools">
+      <div class="tb-head">
+        <div><span class="tb-kicker">Toolbox</span><h3>Go deeper into these frames</h3></div>
+        <p class="muted">16 tools, all working on the images above. Pick one to open it here.</p>
+      </div>
+      <div id="more-tools-body"></div>
+    </section>
+  </section>
+</main>
+
+<div class="keys-modal" id="keys-modal" hidden role="dialog" aria-modal="true" aria-labelledby="keys-title">
+  <div class="keys-box">
+    <div class="keys-head"><b id="keys-title">Keyboard shortcuts</b><button class="btn sm ghost" id="keys-close" type="button">✕ Close</button></div>
+    <dl class="keys-list" id="keys-list"></dl>
+    <p class="muted">On a phone: swipe the picture left or right to step frames; pinch to zoom in the big view (double-tap to reset).</p>
+  </div>
+</div>
+
+<div class="keys-modal band-modal" id="band-modal" hidden role="dialog" aria-modal="true" aria-labelledby="band-title">
+  <div class="keys-box band-box">
+    <div class="keys-head"><b id="band-title">Which detector band?</b><button class="btn sm ghost" id="band-close" type="button">✕ Close</button></div>
+    <div id="band-body"></div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div data-k="footer.team"></div>
+  <div class="muted" data-k="footer.credits"></div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/content.js"></script>
+<script src="js/core.js"></script>
+<script src="js/decor.js"></script>
+<script src="js/api.js"></script>
+<script src="js/player.js"></script>
+<script src="js/skymap.js"></script>
+<script src="js/gif.js"></script>
+<script src="js/features.js"></script>
+<script src="js/views3d.js"></script>
+<script src="js/explorer.js"></script>
+<script src="js/sky.js"></script>
+<script src="js/facts.js"></script>
+<script src="js/extras.js"></script>
+<script src="js/probe.js"></script>
+<script src="js/tutorial.js"></script>
+<script src="js/explore.js"></script>
+</body>
+</html>

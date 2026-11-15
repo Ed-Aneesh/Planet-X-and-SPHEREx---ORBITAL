@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f3ee">
+<script>(function(){var t="light";try{if(localStorage.getItem("orbital.theme")==="dark")t="dark"}catch(e){}document.documentElement.dataset.theme=t})()</script>
+<title>Science Lab • ORBITAL</title>
+<meta name="description" content="Measure any object in real SPHEREx data: aperture and PSF photometry, spectral energy distribution, variability periodogram, Gaia DR3 astrometry and the DR1 all-sky spectral cube - every number with its error budget.">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400..800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/calm.css">
+<link rel="stylesheet" href="css/theme.css">
+<link rel="stylesheet" href="css/lab.css">
+<link rel="stylesheet" href="css/tutorial.css">
+</head>
+<body data-page="lab">
+<header class="nav" id="nav">
+  <a class="brand" href="index.html" aria-label="Home"><span data-k="brand"></span>.</a>
+  <nav class="links" id="nav-links"></nav>
+  <div class="nav-right">
+  </div>
+</header>
+
+<main class="lab">
+  <div class="eyebrow">Science Lab · real SPHEREx data · every number with its error</div>
+  <h1>Measure it, don't just watch it.</h1>
+  <p class="lead">Blinking shows <em>that</em> something changes. The Lab measures <em>how much</em>, and how sure we are.
+    Pick an object: the Lab finds every SPHEREx exposure of it at NASA/IPAC IRSA, measures its brightness in each one,
+    builds its spectrum and light curve, and checks itself against Gaia and the DR1 all-sky cube.</p>
+
+  <details class="primer">
+    <summary>New to this? Six words you will meet below</summary>
+    <dl>
+      <dt>Photometry</dt><dd>Measuring how much light a star sends us. Here in <b>millijansky</b> (mJy): 1 Jy = 10<sup>−26</sup> W m<sup>−2</sup> Hz<sup>−1</sup>, the power per square metre per unit of frequency.</dd>
+      <dt>Aperture vs PSF</dt><dd>Two ways to count the light. <b>Aperture</b>: add up the pixels in a small circle, subtract the sky measured in a ring around it. <b>PSF fitting</b>: fit the known shape a point of light makes on the detector (the point-spread function, here SPHEREx's own measured "ePSF") — it weights each pixel by how much signal it carries, so it is less noisy.</dd>
+      <dt>SED</dt><dd>Spectral energy distribution: brightness against wavelength. A star's SED looks roughly like a <b>blackbody</b> curve whose peak sits at λ<sub>peak</sub> ≈ 2898 µm·K / T, so the shape tells us the temperature.</dd>
+      <dt>Light curve &amp; periodogram</dt><dd>Brightness against time. The <b>Lomb–Scargle periodogram</b> tests every possible period and asks how well a sine wave of that period fits; a tall peak is a candidate period. The <b>false-alarm probability</b> (FAP) is the chance that pure noise makes a peak that tall.</dd>
+      <dt>Error budget</dt><dd>The list of everything that makes a number uncertain, and how much each contributes. <b>Statistical</b> errors shrink when you average many exposures; <b>systematic</b> ones (like the absolute calibration of the instrument) do not.</dd>
+      <dt>Parallax &amp; proper motion</dt><dd>From Gaia (ESA). <b>Parallax</b>: the tiny yearly wobble as Earth orbits the Sun; distance in parsec = 1000 / parallax in milli-arcseconds. <b>Proper motion</b>: the star's steady drift across the sky, which we use to aim at the right spot on every date.</dd>
+    </dl>
+  </details>
+
+  <section class="lab-card" id="lab-form-card">
+    <form id="lab-form" class="lab-form" autocomplete="off">
+      <div class="lab-row">
+        <label class="field grow"><span class="field-k">Preset</span>
+          <select id="lab-preset"><option value="">— type your own coordinates —</option></select></label>
+        <label class="field grow"><span class="field-k">Name</span><input id="lab-name" placeholder="e.g. Tabby's Star"></label>
+      </div>
+      <div class="lab-row">
+        <label class="field"><span class="field-k">RA (deg or hh:mm:ss)</span><input id="lab-ra" required placeholder="301.5644"></label>
+        <label class="field"><span class="field-k">Dec (deg or ±dd:mm:ss)</span><input id="lab-dec" required placeholder="+44.4568"></label>
+        <label class="field"><span class="field-k">Epoch of these coordinates</span><input id="lab-year" value="2000.0"></label>
+      </div>
+      <div class="lab-row">
+        <label class="field"><span class="field-k">Motion east (mas/yr)</span><input id="lab-pmra" value="0"></label>
+        <label class="field"><span class="field-k">Motion north (mas/yr)</span><input id="lab-pmdec" value="0"></label>
+        <label class="field"><span class="field-k">Exposures per band (max)</span><input id="lab-max" type="number" min="2" max="120" value="24"></label>
+      </div>
+      <div class="lab-row wrap">
+        <fieldset class="field bands"><span class="field-k">Bands</span>
+          <div id="lab-bands"></div></fieldset>
+        <label class="toggle"><input type="checkbox" id="lab-gaia" checked> Gaia DR3 (overrides the motion above when it finds the star)</label>
+        <label class="toggle"><input type="checkbox" id="lab-cube" checked> DR1 all-sky spectral cube</label>
+      </div>
+      <div class="lab-row actions">
+        <button class="btn primary" id="lab-run" type="submit">Run the analysis</button>
+        <button class="btn ghost" id="lab-cancel" type="button" disabled>Cancel</button>
+        <span class="status" id="lab-status" role="status" aria-live="polite"></span>
+      </div>
+      <p class="muted small">All six bands with 24 exposures each downloads ~150 small cutouts (≈15–30 MB) and takes a few minutes the first time; results of the same exposures are cached by the server afterwards.</p>
+    </form>
+  </section>
+
+  <section class="lab-card" id="lab-pipeline" hidden>
+    <h2>Pipeline <small>each stage runs on its own; a failure never hides the others</small></h2>
+    <ol class="stages" id="lab-stages"></ol>
+    <details><summary>Live log</summary><pre class="log" id="lab-log"></pre></details>
+  </section>
+
+  <div id="lab-results" hidden>
+    <section class="lab-card" id="res-summary"></section>
+    <section class="lab-card" id="res-gaia"></section>
+    <section class="lab-card" id="res-sed"></section>
+    <section class="lab-card" id="res-var"></section>
+    <section class="lab-card" id="res-phot"></section>
+    <section class="lab-card" id="res-unc"></section>
+    <section class="lab-card" id="res-cube"></section>
+    <section class="lab-card" id="res-prov"></section>
+  </div>
+  <div class="tip" id="lab-tip" role="tooltip" hidden></div>
+</main>
+
+<footer class="footer">
+  <div data-k="footer.team"></div>
+  <div class="muted" data-k="footer.disclaimer"></div>
+</footer>
+<script src="js/config.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/content.js"></script>
+<script src="js/core.js"></script>
+<script src="js/api.js"></script>
+<script src="js/lab.js"></script>
+<script src="js/tutorial.js"></script>
+<script src="js/explore.js"></script>
+</body>
+</html>

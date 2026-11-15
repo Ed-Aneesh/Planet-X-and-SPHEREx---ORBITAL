@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f3ee">
+<script>(function(){var t="light";try{if(localStorage.getItem("orbital.theme")==="dark")t="dark"}catch(e){}document.documentElement.dataset.theme=t})()</script>
+<title>Credits &amp; references • ORBITAL</title>
+<meta name="description" content="Every dataset, archive service, research paper, standard, software library and image ORBITAL uses, with links and what each was used for.">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400..800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/calm.css">
+<link rel="stylesheet" href="css/theme.css">
+<style>
+  .sci { max-width: 940px; margin: 0 auto; padding: 110px 22px 60px; line-height: 1.62; }
+  .sci h1 { font-family: var(--f-display); font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.05; margin: .2em 0 .3em; }
+  .sci h2 { font-family: var(--f-display); font-size: 1.45rem; margin: 2.2em 0 .5em; padding-top: .6em; border-top: 1px solid var(--line); }
+  .sci h2 small { font-family: var(--f-mono); font-size: .7rem; color: var(--muted); margin-right: .7em; font-weight: 400; }
+  .sci p, .sci li { color: var(--ink); max-width: 72ch; }
+  .sci .muted { color: var(--muted); }
+  .sci .lead { font-size: 1.12rem; }
+  .sci .tldr { border: 1px solid var(--line); border-radius: 18px; padding: 16px 20px; background: rgba(201,212,251,.05); }
+  .sci .tldr b { color: var(--hi); }
+  .sci table { width: 100%; border-collapse: collapse; font-size: .86rem; margin: .8em 0; }
+  .sci th, .sci td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  .sci th { font-family: var(--f-mono); font-size: .72rem; color: var(--muted); font-weight: 400; }
+  .sci td.num { font-family: var(--f-mono); white-space: nowrap; }
+  .sci .ok { color: var(--ok); } .sci .warn { color: var(--warn); } .sci .na { color: var(--muted); }
+  .sci .tag { font-family: var(--f-mono); font-size: .68rem; padding: 1px 6px; border-radius: 6px; border: 1px solid var(--line); color: var(--ink); background: transparent; }
+  .sci .wide { overflow-x: auto; }
+  .sci code { font-family: var(--f-mono); font-size: .85em; }
+  .sci .toc { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .86rem; }
+  .sci .toc a, .sci a { color: var(--lav); }
+  html[data-theme="light"] .sci a { color: #2a54c4; }
+  html[data-theme="light"] .sci .tldr b { color: #17804f; }
+  html[data-theme="light"] .sci .tldr { background: #fff; }
+  .sci .fig { margin: 1em 0; }
+  .sci .fig img { width: 100%; max-width: 640px; border-radius: 12px; display: block; }
+  .sci .fig figcaption { font-size: .82rem; color: var(--muted); margin-top: .4em; }
+  .sci .ref { margin: .45em 0; padding-left: 1.2em; text-indent: -1.2em; font-size: .92rem; }
+  .sci .ref .use { display: block; text-indent: 0; color: var(--muted); font-size: .82rem; margin-top: 1px; }
+  .sci .ack { border: 1px solid var(--line); border-radius: 14px; padding: 10px 14px; margin: .6em 0; font-size: .9rem; }
+  .sci .k { font-family: var(--f-mono); font-size: .64rem; padding: 0 5px; border-radius: 5px; border: 1px solid var(--line); margin-right: 6px; text-indent: 0; display: inline-block; }
+  .sci .k.data { border-color: var(--ok); } .sci .k.code { border-color: var(--lav-2); } .sci .k.method { border-color: var(--hi); }
+  .sci .k.check { border-color: var(--warn); } .sci .k.context { border-color: var(--muted); }
+</style>
+<link rel="stylesheet" href="css/tutorial.css">
+</head>
+<body data-page="credits">
+<header class="nav" id="nav">
+  <a class="brand" href="index.html" aria-label="Home"><span data-k="brand"></span>.</a>
+  <nav class="links" id="nav-links"></nav>
+  <div class="nav-right">
+  </div>
+</header>
+
+<main class="sci">
+  <div class="eyebrow">Credits · data · papers · standards · software · images</div>
+  <h1>Credits &amp; references</h1>
+  <p class="lead">Everything ORBITAL stands on. Each entry says what we used it for. Nothing here is decoration: every item below is
+    read by our code, checked our numbers, or shaped a decision.</p>
+  <p class="muted">Tags: <span class="k data">data</span>we download or display it ·
+    <span class="k code">code</span>a service or library our code calls ·
+    <span class="k method">method</span>a formula or algorithm we implemented ·
+    <span class="k check">check</span>we tested our results against it ·
+    <span class="k context">context</span>background that shaped a design choice.
+    <a href="science.html">← Back to Science notes</a></p>
+  <p class="toc"><a href="#ack">1 · Required acknowledgements</a><a href="#data">2 · Data &amp; releases</a>
+    <a href="#services">3 · Archives &amp; services</a><a href="#mission">4 · SPHEREx mission &amp; calibration papers</a>
+    <a href="#methods">5 · Methods papers</a><a href="#targets">6 · Target science</a><a href="#standards">7 · Standards</a>
+    <a href="#software">8 · Software</a><a href="#context">9 · Context &amp; inspiration</a><a href="#images">10 · Images &amp; fonts</a>
+    <a href="#licence">11 · Licence</a></p>
+  <h2 id="ack"><small>01</small>Required acknowledgements</h2>
+  <div class="ack"><b>SPHEREx.</b> This work uses data from the Spectro-Photometer for the History of the Universe, Epoch of Reionization
+    and Ices Explorer (SPHEREx), a NASA mission managed by JPL/Caltech, obtained from the NASA/IPAC Infrared Science Archive (IRSA), which is
+    operated by the California Institute of Technology under contract with the National Aeronautics and Space Administration.</div>
+  <div class="ack"><b>IRSA.</b> This research has made use of the NASA/IPAC Infrared Science Archive, which is funded by the National
+    Aeronautics and Space Administration and operated by the California Institute of Technology.</div>
+  <div class="ack"><b>2MASS.</b> This publication makes use of data products from the Two Micron All Sky Survey, which is a joint project of
+    the University of Massachusetts and the Infrared Processing and Analysis Center/California Institute of Technology, funded by the National
+    Aeronautics and Space Administration and the National Science Foundation.</div>
+  <div class="ack"><b>WISE.</b> This publication makes use of data products from the Wide-field Infrared Survey Explorer, which is a joint
+    project of the University of California, Los Angeles, and the Jet Propulsion Laboratory/California Institute of Technology, funded by the
+    National Aeronautics and Space Administration.</div>
+  <div class="ack"><b>Gaia.</b> This work has made use of data from the European Space Agency (ESA) mission Gaia
+    (<a href="https://www.cosmos.esa.int/gaia" target="_blank" rel="noopener">cosmos.esa.int/gaia</a>), processed by the Gaia Data Processing and Analysis Consortium (DPAC,
+    <a href="https://www.cosmos.esa.int/web/gaia/dpac/consortium" target="_blank" rel="noopener">cosmos.esa.int/web/gaia/dpac/consortium</a>). Funding for the DPAC has been provided by
+    national institutions, in particular the institutions participating in the Gaia Multilateral Agreement.</div>
+  <div class="ack"><b>CDS.</b> This research has made use of Aladin Lite and the SIMBAD database, operated at CDS, Strasbourg Astronomical
+    Observatory, France.</div>
+  <h2 id="data"><small>02</small>Data &amp; releases</h2>
+  <p class="ref"><span class="k data">data</span>SPHEREx Team. <b>SPHEREx Data Release 1 (DR1) spectral images.</b> NASA/IPAC IRSA, <a href="https://doi.org/10.26131/IRSA678" target="_blank" rel="noopener">doi:10.26131/IRSA678</a><span class="use">Every Sky Probe and Science Lab image (collection spherex_dr1); the main data of this project.</span></p>
+  <p class="ref"><span class="k data">data</span>SPHEREx Team. <b>SPHEREx Quick Release 3 (QR3) spectral images.</b> NASA/IPAC IRSA, <a href="https://doi.org/10.26131/IRSA662" target="_blank" rel="noopener">doi:10.26131/IRSA662</a><span class="use">Searched together with DR1 (IRSA processes them uniformly); fills in weeks not yet in DR1.</span></p>
+  <p class="ref"><span class="k data">data</span>SPHEREx Team. <b>SPHEREx Quick Release 2 (QR2)</b>, <a href="https://doi.org/10.26131/IRSA652" target="_blank" rel="noopener">doi:10.26131/IRSA652</a>; <b>Quick Release 1 (QR1)</b>, <a href="https://doi.org/10.26131/IRSA629" target="_blank" rel="noopener">doi:10.26131/IRSA629</a><span class="use">Fallback collections only, used when DR1/QR3 have nothing at a position. Never mixed with DR1/QR3 in one result.</span></p>
+  <p class="ref"><span class="k data">data</span>SPHEREx Team. <b>SPHEREx DR1 all-sky spectral cube</b> (HiPS, HEALPix order 5, 102 channels). NASA/IPAC IRSA, <a href="https://doi.org/10.26131/IRSA679" target="_blank" rel="noopener">doi:10.26131/IRSA679</a><span class="use">Science Lab cross-check: spectrum at any position, read by HTTP byte ranges. IRSA labels it a visualisation product.</span></p>
+  <p class="ref"><span class="k data">data</span><b>The team's Google Drive copy</b> of IRSA SPHEREx files (19 targets, Nov 2026).<span class="use">Star Vault: plays saved IRSA files so the demo works even if IRSA is down. Same files, same DOIs as above.</span></p>
+  <p class="ref"><span class="k data">data</span><span class="k check">check</span>Gaia Collaboration, Vallenari, A. et al. 2023, <b>Gaia Data Release 3: Summary of the content and survey properties</b>, A&amp;A 674, A1 (<a href="https://arxiv.org/abs/2208.00211" target="_blank" rel="noopener">arXiv:2208.00211</a>); Gaia Collaboration, Prusti, T. et al. 2016, <b>The Gaia mission</b>, A&amp;A 595, A1.<span class="use">Star rings on every frame; target identification, parallax, proper motion, radial velocity, stellar parameters in the Lab; validation of our measured motions.</span></p>
+  <p class="ref"><span class="k data">data</span>De Angeli, F. et al. 2023, <b>Gaia DR3: Processing and validation of BP/RP low-resolution spectral data</b>, A&amp;A 674, A2; Montegriffo, P. et al. 2023, <b>Gaia DR3: External calibration of BP/RP low-resolution spectroscopic data</b>, A&amp;A 674, A3.<span class="use">Gaia XP spectra on the Science Lab SED (optical part, 0.4–0.8 µm).</span></p>
+  <p class="ref"><span class="k data">data</span>Skrutskie, M. F. et al. 2006, <b>The Two Micron All Sky Survey (2MASS)</b>, AJ 131, 1163.<span class="use">1997–2001 images on the SPHEREx grid: the 27-year baseline for proper motion.</span></p>
+  <p class="ref"><span class="k data">data</span>Wright, E. L. et al. 2010, <b>The Wide-field Infrared Survey Explorer (WISE): Mission Description and Initial On-orbit Performance</b>, AJ 140, 1868; Cutri, R. M. et al. 2013, <b>Explanatory Supplement to the AllWISE Data Release Products</b>, IPAC.<span class="use">AllWISE 2010–11 images on the SPHEREx grid: the 16-year baseline used in the validation table.</span></p>
+  <p class="ref"><span class="k data">data</span><b>Digitized Sky Survey (DSS2)</b>, Space Telescope Science Institute, as HiPS colour survey (CDS).<span class="use">Optical background option in the sky atlas.</span></p>
+  <h2 id="services"><small>03</small>Archives, services &amp; documentation</h2>
+  <p class="ref"><span class="k code">code</span><b>NASA/IPAC IRSA Simple Image Access v2 service</b> (<a href="https://irsa.ipac.caltech.edu/SIA" target="_blank" rel="noopener">irsa.ipac.caltech.edu/SIA</a>) and <b>TAP service</b> (<a href="https://irsa.ipac.caltech.edu/TAP" target="_blank" rel="noopener">irsa.ipac.caltech.edu/TAP</a>).<span class="use">Finding every SPHEREx exposure that covers a position; raced against each other so either can be slow.</span></p>
+  <p class="ref"><span class="k code">code</span><b>IRSA image cutout service</b> for SPHEREx spectral images; <a href="https://caltech-ipac.github.io/spherex-archive-documentation/spherex-data-products" target="_blank" rel="noopener">SPHEREx Archive User Guide: data products</a> and <a href="https://caltech-ipac.github.io/spherex-archive-documentation/spherex-data-access" target="_blank" rel="noopener">data access</a>.<span class="use">Downloading only the small patch we need from each 2040×2040 image.</span></p>
+  <p class="ref"><span class="k code">code</span><span class="k check">check</span>SPHEREx Science Data Center, <b>SPHEREx Explanatory Supplement</b> (SSDC-DP-017), Caltech/IPAC, <a href="https://irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp_QR.pdf" target="_blank" rel="noopener">irsa.ipac.caltech.edu/data/SPHEREx/docs/SPHEREx_Expsupp_QR.pdf</a>; IRSA <a href="https://irsa.ipac.caltech.edu/data/SPHEREx/docs/overview_dr1.html" target="_blank" rel="noopener">DR1 overview</a> and <a href="https://irsa.ipac.caltech.edu/data/SPHEREx/docs/overview_qr.html" target="_blank" rel="noopener">QR overview</a>; <a href="https://irsa.ipac.caltech.edu/data/SPHEREx/docs/psfhdrerr.html" target="_blank" rel="noopener">PSF header error notice</a>.<span class="use">File layout (IMAGE, FLAGS, VARIANCE, ZODI, PSF, WCS-WAVE), flag bits, units, release rules, why old PSF layers are refused.</span></p>
+  <p class="ref"><span class="k code">code</span>IRSA, <b>SPHEREx tutorials</b>: <a href="https://caltech-ipac.github.io/irsa-tutorials/spherex-intro/" target="_blank" rel="noopener">intro</a>, <a href="https://caltech-ipac.github.io/irsa-tutorials/spherex-cutouts" target="_blank" rel="noopener">cutouts</a>, <a href="https://caltech-ipac.github.io/irsa-tutorials/spherex-psf/" target="_blank" rel="noopener">PSF</a>.<span class="use">How to query, cut out and read SPHEREx files; reading the PSF extension.</span></p>
+  <p class="ref"><span class="k code">code</span><b>IRSA SPHEREx Data Explorer</b> and <b>Spectrophotometry Tool</b> (<a href="https://irsa.ipac.caltech.edu/applications/spherex/" target="_blank" rel="noopener">irsa.ipac.caltech.edu/applications/spherex</a>).<span class="use">“Every SPHEREx image here” buttons open IRSA's own tools with the search already run.</span></p>
+  <p class="ref"><span class="k code">code</span><b>IRSA Moving Object Search Tool (MOST)</b>, catalog = spherex (<a href="https://irsa.ipac.caltech.edu/applications/MOST/" target="_blank" rel="noopener">irsa.ipac.caltech.edu/applications/MOST</a>).<span class="use">Verifying which asteroids SPHEREx really photographed, and when (asteroid presets in the Sky Probe).</span></p>
+  <p class="ref"><span class="k code">code</span><b>IRSA Gator</b> catalogue service, table gaia_dr3_source (<a href="https://irsa.ipac.caltech.edu/cgi-bin/Gator/nph-query" target="_blank" rel="noopener">irsa.ipac.caltech.edu/cgi-bin/Gator</a>).<span class="use">Gaia DR3 fallback when the TAP services are down (it was the only one answering on 15 Nov 2026).</span></p>
+  <p class="ref"><span class="k code">code</span><b>IRSA 2MASS All-Sky Atlas and AllWISE Atlas image services</b> (SIA collections twomass_allsky and wise_allwise).<span class="use">Older images placed on the SPHEREx grid.</span></p>
+  <p class="ref"><span class="k code">code</span><b>ESA Gaia Archive</b> TAP and DataLink (<a href="https://gea.esac.esa.int/archive/" target="_blank" rel="noopener">gea.esac.esa.int/archive</a>); ESA, <a href="https://www.cosmos.esa.int/web/gaia-users/archive/datalink-products" target="_blank" rel="noopener">How to retrieve DataLink products</a>.<span class="use">First choice for Gaia DR3 astrometry; XP spectra fallback.</span></p>
+  <p class="ref"><span class="k code">code</span>Demleitner, M. &amp; Andrae, R., <b>Gaia DR3 XP spectrum datalink / Monte-Carlo sampled XP spectra</b>, GAVO Data Center, Heidelberg (<a href="https://dc.g-vo.org/gaia/s3/ssa/info" target="_blank" rel="noopener">dc.g-vo.org/gaia/s3</a>).<span class="use">Gaia XP spectra with decorrelated errors, the version we fit in the SED.</span></p>
+  <p class="ref"><span class="k code">code</span><b>NASA/JPL Solar System Dynamics, Small-Body Identification API</b> (<a href="https://ssd-api.jpl.nasa.gov/doc/sb_ident.html" target="_blank" rel="noopener">ssd-api.jpl.nasa.gov/doc/sb_ident.html</a>).<span class="use">Which known asteroids and comets were in the patch on each SPHEREx date.</span></p>
+  <p class="ref"><span class="k check">check</span><b>NASA/JPL Horizons</b> ephemeris system (<a href="https://ssd.jpl.nasa.gov/horizons/" target="_blank" rel="noopener">ssd.jpl.nasa.gov/horizons</a>).<span class="use">Checking the units of the Small-Body API's motion rates (on-sky RA rate, arcsec per hour).</span></p>
+  <p class="ref"><span class="k code">code</span>Wenger, M. et al. 2000, <b>The SIMBAD astronomical database</b>, A&amp;AS 143, 9 (<a href="https://simbad.cds.unistra.fr/simbad/" target="_blank" rel="noopener">simbad.cds.unistra.fr</a>).<span class="use">Target positions, proper motions and object types; name look-up in the sky atlas.</span></p>
+  <p class="ref"><span class="k code">code</span>Bonnarel, F. et al. 2000, <b>The ALADIN interactive sky atlas</b>, A&amp;AS 143, 33; Boch, T. &amp; Fernique, P. 2014, <b>Aladin Lite: Embed your Sky in the Browser</b>, ASP Conf. Ser. 485, 277.<span class="use">The zoomable sky atlas (Aladin Lite 3.8.2, shipped with the site).</span></p>
+  <p class="ref"><span class="k code">code</span>Fernique, P. et al. 2015, <b>Hierarchical progressive surveys</b>, A&amp;A 578, A114; HiPS mirrors at CDS, <a href="https://skies.esac.esa.int/" target="_blank" rel="noopener">ESA ESASky</a>, <a href="https://casda.csiro.au/hips/" target="_blank" rel="noopener">CSIRO CASDA</a> and <a href="https://hips.china-vo.org/" target="_blank" rel="noopener">China-VO</a>.<span class="use">Background sky images (2MASS, AllWISE, DSS colour) in the atlas, with mirrors in case one server is down.</span></p>
+  <h2 id="mission"><small>04</small>SPHEREx mission &amp; calibration papers</h2>
+  <p class="ref"><span class="k context">context</span>Bock, J. J. et al. 2025/2026, <b>The SPHEREx Satellite Mission</b>, ApJ (<a href="https://doi.org/10.3847/1538-4357/ae2be2" target="_blank" rel="noopener">doi:10.3847/1538-4357/ae2be2</a>; <a href="https://arxiv.org/abs/2511.02985" target="_blank" rel="noopener">arXiv:2511.02985</a>).<span class="use">102 channels, 0.75–5 µm, 6.15″ pixels, survey cadence, paired detectors: the facts behind our design.</span></p>
+  <p class="ref"><span class="k context">context</span>Crill, B. P. et al., <b>SPHEREx: NASA's Near-Infrared Spectrophotometric All-Sky Survey</b> (<a href="https://arxiv.org/abs/2404.11017" target="_blank" rel="noopener">arXiv:2404.11017</a>); Doré, O. et al. 2014, <b>Cosmology with the SPHEREx All-Sky Spectral Survey</b> (<a href="https://arxiv.org/abs/1412.4872" target="_blank" rel="noopener">arXiv:1412.4872</a>).<span class="use">Mission design, release plan (weekly quick releases, yearly reprocessed releases, all-sky cube).</span></p>
+  <p class="ref"><span class="k method">method</span><span class="k check">check</span>Hui, H., Bock, J. J., Condon, S. et al. 2026, <b>Spectral Response of SPHEREx</b>, ApJS 284, 10 (<a href="https://doi.org/10.3847/1538-4365/ae522c" target="_blank" rel="noopener">doi:10.3847/1538-4365/ae522c</a>; <a href="https://arxiv.org/abs/2602.09139" target="_blank" rel="noopener">arXiv:2602.09139</a>).<span class="use">Linear variable filters, per-pixel wavelength and bandwidth, wavelength-calibration accuracy used in the Lab's spectral error note.</span></p>
+  <p class="ref"><span class="k context">context</span>Korngut, P. M. et al. 2026, <b>The SPHEREx Instrument: Calibration, testing and performance measurements</b> (<a href="https://arxiv.org/abs/2603.29835" target="_blank" rel="noopener">arXiv:2603.29835</a>).<span class="use">Instrument behaviour (PSF, detectors, dichroic split at 2.42 µm).</span></p>
+  <p class="ref"><span class="k context">context</span>Akeson, R. et al. 2026, <b>The SPHEREx Image and Spectrophotometry Processing Pipeline</b>, ApJS 285, 67.<span class="use">How the L2 images we use are made (zodiacal-light model, flags, calibration).</span></p>
+  <p class="ref"><span class="k context">context</span>Cukierman, A. J. et al. 2026, <b>Spectral Map Making with SPHEREx</b>, ApJS 286, 22 (<a href="https://arxiv.org/abs/2603.25790" target="_blank" rel="noopener">arXiv:2603.25790</a>).<span class="use">How spectral maps/cubes are built from single exposures: why the DR1 cube's effective PSF is broader than one exposure's.</span></p>
+  <p class="ref"><span class="k method">method</span><span class="k check">check</span><b>SPHEREx Ultracool Dwarf spectrophotometric Atlas (SUDA)</b>, 2026 (<a href="https://arxiv.org/abs/2604.26771" target="_blank" rel="noopener">arXiv:2604.26771</a>).<span class="use">The ~5 % absolute-calibration term in our photometry error budget.</span></p>
+  <p class="ref"><span class="k method">method</span><span class="k check">check</span>Gagné, J., Faherty, J. K. et al. 2026, <b>A SPHEREx Pipeline and Spectral Library for Ultracool Dwarfs</b> (SPIFF) (<a href="https://arxiv.org/abs/2604.22012" target="_blank" rel="noopener">arXiv:2604.22012</a>).<span class="use">Forced ePSF photometry of fast movers at each epoch (same idea as our Lab); SPHEREx's 2 % calibration design goal and their 8 % conservative floor.</span></p>
+  <p class="ref"><span class="k context">context</span>Rustamkulov, Z. et al. 2026, <b>SPHEREx 0.75 to 5 µm Spectra for a Sequence of Nearby Brown Dwarfs</b> (<a href="https://arxiv.org/abs/2607.00543" target="_blank" rel="noopener">arXiv:2607.00543</a>).<span class="use">WISE 0855 only detected beyond ~3.9 µm (so we default it to D6); bad pixels under-flagged in early data.</span></p>
+  <h2 id="methods"><small>05</small>Methods papers we implemented</h2>
+  <h3>Positions, motions and Gaia</h3>
+  <p class="ref"><span class="k method">method</span>ESA 1997, <b>The Hipparcos and Tycho Catalogues</b>, ESA SP-1200, Vol. 1, Sect. 1.2.8; Butkevich, A. G. &amp; Lindegren, L. 2014, <b>Rigorous treatment of barycentric stellar motion</b>, A&amp;A 570, A62.<span class="use">Rigorous 3-D epoch propagation with perspective acceleration (Barnard's Star). Verified against astropy/ERFA to < 0.1 mas.</span></p>
+  <p class="ref"><span class="k method">method</span>Lindegren, L. et al. 2021, <b>Gaia Early Data Release 3: Parallax bias versus magnitude, colour, and position</b>, A&amp;A 649, A4.<span class="use">The −17 µas parallax zero point.</span></p>
+  <p class="ref"><span class="k method">method</span>El-Badry, K., Rix, H.-W. &amp; Heintz, T. M. 2021, <b>A million binaries from Gaia eDR3</b>, MNRAS 506, 2269.<span class="use">Warning that Gaia errors of bright stars are underestimated.</span></p>
+  <p class="ref"><span class="k method">method</span>Bailer-Jones, C. A. L. et al. 2021, <b>Estimating Distances from Parallaxes. V.</b>, AJ 161, 147.<span class="use">Why we refuse 1/parallax when parallax/error < 5.</span></p>
+  <p class="ref"><span class="k method">method</span>Schönrich, R., Binney, J. &amp; Dehnen, W. 2010, <b>Local kinematics and the local standard of rest</b>, MNRAS 403, 1829.<span class="use">Sun's motion (U, V, W) for space velocities relative to the local standard of rest.</span></p>
+  <p class="ref"><span class="k method">method</span>Gaia Collaboration, <b>Gaia DR3 documentation</b>, Sect. 4.1.7 (ICRS–Galactic transformation) (<a href="https://gea.esac.esa.int/archive/documentation/GDR3/" target="_blank" rel="noopener">gea.esac.esa.int/archive/documentation/GDR3</a>).<span class="use">The rotation matrix for U, V, W.</span></p>
+  <h3>Images, maps and projections</h3>
+  <p class="ref"><span class="k method">method</span>Greisen, E. W. &amp; Calabretta, M. R. 2002, <b>Representations of world coordinates in FITS</b>, A&amp;A 395, 1061; Calabretta, M. R. &amp; Greisen, E. W. 2002, <b>Representations of celestial coordinates in FITS</b>, A&amp;A 395, 1077.<span class="use">WCS: turning pixel positions into sky coordinates (our numpy TAN/SIN code and the alignment of every frame).</span></p>
+  <p class="ref"><span class="k method">method</span>Shupe, D. L. et al. 2005, <b>The SIP Convention for Representing Distortion in FITS Image Headers</b>, ASP Conf. Ser. 347, 491.<span class="use">SPHEREx's optical distortion terms, so fixed stars stay on the same pixel.</span></p>
+  <p class="ref"><span class="k method">method</span>Górski, K. M. et al. 2005, <b>HEALPix: A Framework for High-Resolution Discretization and Fast Analysis of Data Distributed on the Sphere</b>, ApJ 622, 759.<span class="use">Finding the DR1 cube tile for any position (nested pixel index).</span></p>
+  <p class="ref"><span class="k method">method</span>Calabretta, M. R. &amp; Roukema, B. F. 2007, <b>Mapping on the HEALPix grid</b>, MNRAS 381, 865.<span class="use">The HPX projection of the cube tiles (matches astropy to 6×10⁻¹² px).</span></p>
+  <p class="ref"><span class="k method">method</span>Tody, D. 1986, <b>The IRAF Data Reduction and Analysis System</b>, Proc. SPIE 627, 733 (ZScale algorithm); Lupton, R. H., Gunn, J. E. &amp; Szalay, A. S. 1999, <b>A Modified Magnitude System that Produces Well-Behaved Magnitudes, Colors, and Errors Even for Low Signal-to-Noise Ratio Measurements</b>, AJ 118, 1406; Lupton, R. et al. 2004, PASP 116, 133.<span class="use">Display stretch: ZScale limits + asinh, shared by all frames so brightness changes stay honest.</span></p>
+  <p class="ref"><span class="k method">method</span>Anderson, J. &amp; King, I. R. 2000, <b>Toward High-Precision Astrometry with WFPC2. I. Deriving an Accurate Point-Spread Function</b>, PASP 112, 1360.<span class="use">The effective-PSF (ePSF) idea behind SPHEREx's PSF tables and our PSF-fitting photometry.</span></p>
+  <h3>Spectra, statistics and time series</h3>
+  <p class="ref"><span class="k method">method</span>Planck's law; Stefan–Boltzmann law; Wien's displacement law; Oke, J. B. &amp; Gunn, J. E. 1983, <b>Secondary standard stars for absolute spectrophotometry</b>, ApJ 266, 713 (AB magnitudes).<span class="use">Blackbody SED fits, radius and luminosity, AB magnitudes.</span></p>
+  <p class="ref"><span class="k method">method</span>Schwarz, G. 1978, <b>Estimating the Dimension of a Model</b>, Ann. Statist. 6, 461.<span class="use">BIC (Bayesian information criterion) to compare SED models.</span></p>
+  <p class="ref"><span class="k method">method</span>Lomb, N. R. 1976, Ap&amp;SS 39, 447; Scargle, J. D. 1982, ApJ 263, 835; Zechmeister, M. &amp; Kürster, M. 2009, <b>The generalised Lomb–Scargle periodogram</b>, A&amp;A 496, 577; VanderPlas, J. T. 2018, <b>Understanding the Lomb–Scargle Periodogram</b>, ApJS 236, 16.<span class="use">Period search in the Lab (matches astropy to 10⁻¹⁴).</span></p>
+  <p class="ref"><span class="k method">method</span>Baluev, R. V. 2008, <b>Assessing the statistical significance of periodogram peaks</b>, MNRAS 385, 1279.<span class="use">False-alarm probabilities (the FAP lines).</span></p>
+  <p class="ref"><span class="k method">method</span>Vaughan, S. et al. 2003, <b>On characterizing the variability properties of X-ray light curves from active galaxies</b>, MNRAS 345, 1271.<span class="use">Excess variance and fractional variability F<sub>var</sub> with errors.</span></p>
+  <p class="ref"><span class="k method">method</span>Tiesinga, E. et al. 2021, <b>CODATA recommended values of the fundamental physical constants: 2018</b>, Rev. Mod. Phys. 93, 025010; IAU 2012 Resolution B2 (astronomical unit); Prša, A. et al. 2016, <b>Nominal Values for Selected Solar and Planetary Quantities: IAU 2015 Resolution B3</b>, AJ 152, 41.<span class="use">Physical constants and solar units in every conversion.</span></p>
+  <h2 id="targets"><small>06</small>Target science</h2>
+  <p class="ref"><span class="k check">check</span>Luhman, K. L. &amp; Esplin, T. L. 2016, <b>The Spectral Energy Distribution of the Coldest Known Brown Dwarf</b>, AJ 152, 78.<span class="use">WISE 0855−0714 proper motion used in our validation table.</span></p>
+  <p class="ref"><span class="k context">context</span>Rodriguez, J. E. et al. 2016, on the 2014–15 deep dimming of <b>RW Aurigae A</b> (<a href="https://arxiv.org/abs/1512.03745" target="_blank" rel="noopener">arXiv:1512.03745</a>).<span class="use">What to expect from RW Aurigae (challenge target): deep dust dimming.</span></p>
+  <p class="ref"><span class="k context">context</span>NASA Astrobiology, <b>Barnard's Star</b> (<a href="https://astrobiology.nasa.gov/news/barnards-star/" target="_blank" rel="noopener">astrobiology.nasa.gov/news/barnards-star</a>), and the image sources listed in section 10.<span class="use">Fun facts on the home page and in the Star Vault.</span></p>
+  <p class="ref"><span class="k data">data</span>Target positions and motions: SIMBAD and Gaia DR3 (above).<span class="use">All 19 targets plus the asteroid and deep-field presets.</span></p>
+  <h2 id="standards"><small>07</small>Standards</h2>
+  <p class="ref"><span class="k method">method</span>Pence, W. D. et al. 2010, <b>Definition of the Flexible Image Transport System (FITS), version 3.0</b>, A&amp;A 524, A42; FITS Standard 4.0 (<a href="https://fits.gsfc.nasa.gov/fits_standard.html" target="_blank" rel="noopener">fits.gsfc.nasa.gov</a>).<span class="use">Our own FITS reader (multi-extension files, binary tables, byte ranges) and the FITS export.</span></p>
+  <p class="ref"><span class="k code">code</span>IVOA <b>Table Access Protocol (TAP)</b> and <b>ADQL</b>; <b>Simple Image Access v2 (SIA)</b>; <b>Simple Spectral Access (SSA)</b>; <b>DataLink</b>; <b>VOTable</b>; <b>HiPS</b> — <a href="https://www.ivoa.net/documents/" target="_blank" rel="noopener">ivoa.net/documents</a>.<span class="use">Every archive query and reply the site makes or parses.</span></p>
+  <h2 id="software"><small>08</small>Software</h2>
+  <p class="ref"><span class="k code">code</span>Astropy Collaboration 2013, A&amp;A 558, A33; 2018, AJ 156, 123; 2022, ApJ 935, 167.<span class="use">FITS, WCS, ZScale, times; and the independent reference in our self-tests (apply_space_motion, LombScargle, HPX). Optional: the backend falls back to its own numpy code.</span></p>
+  <p class="ref"><span class="k code">code</span>Harris, C. R. et al. 2020, <b>Array programming with NumPy</b>, Nature 585, 357.<span class="use">All numerical work.</span></p>
+  <p class="ref"><span class="k code">code</span><span class="k check">check</span>Virtanen, P. et al. 2020, <b>SciPy 1.0</b>, Nature Methods 17, 261; <b>ERFA</b> (Essential Routines for Fundamental Astronomy, derived from IAU SOFA).<span class="use">Independent references in the self-tests only.</span></p>
+  <p class="ref"><span class="k code">code</span><b>Requests</b> (Python HTTP library); <b>google-auth</b> (Google Drive service account); <b>Google Drive API v3</b>.<span class="use">Archive downloads; Star Vault's saved copy.</span></p>
+  <p class="ref"><span class="k code">code</span><b>Aladin Lite 3.8.2</b>, CDS (LGPL-3.0), shipped in frontend/vendor.<span class="use">The sky atlas.</span></p>
+  <p class="ref"><span class="k code">code</span><b>Render</b> (web hosting).<span class="use">Public deployment.</span></p>
+  <h2 id="context"><small>09</small>Context &amp; inspiration</h2>
+  <p class="ref"><span class="k context">context</span>NASA Space Apps Challenge 2026 (<a href="https://www.spaceappschallenge.org/2026/" target="_blank" rel="noopener">spaceappschallenge.org/2026</a>), SPHEREx sky-image challenge statement.<span class="use">The task: a public tool that plays SPHEREx images of any position over time.</span></p>
+  <p class="ref"><span class="k context">context</span>Backyard Worlds: Planet 9 and the WiseView blink tool: Kirkpatrick, J. D. et al. (<a href="https://arxiv.org/abs/1911.12372" target="_blank" rel="noopener">arXiv:1911.12372</a>); Marocco, F. et al., AJ (<a href="https://iopscience.iop.org/article/10.3847/1538-3881/ac4713" target="_blank" rel="noopener">doi:10.3847/1538-3881/ac4713</a>); Faherty, J. K. et al. (<a href="https://arxiv.org/abs/2112.04678" target="_blank" rel="noopener">arXiv:2112.04678</a>); NASA Science, <a href="https://science.nasa.gov/citizen-science/backyard-worlds-planet-9/" target="_blank" rel="noopener">Backyard Worlds</a>.<span class="use">Proof that public blinking finds real objects; shareable blink links and Gaia overlays come from this tradition.</span></p>
+  <h2 id="images"><small>10</small>Images &amp; fonts</h2>
+  <p><b>Target photographs — 14 image credits</b> (home page and Star Vault, labelled "Not SPHEREx"):</p>
+  <ul class='muted'><li><b>wise0855</b>: <a href="https://commons.wikimedia.org/w/index.php?curid=149159405">NASA/ESA/CSA JWST NIRCam; Alves de Oliveira et al.; processing Melina Thévenot</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>)</li>
+<li><b>wr140</b>: <a href="https://esawebb.org/images/weic2307d/">ESA/Webb, NASA, CSA</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>)</li>
+<li><b>etacar</b>: <a href="https://science.nasa.gov/image-detail/stsci-h-p1918a-f-2000x2000-1/">NASA, ESA (Hubble)</a></li>
+<li><b>3c273</b>: <a href="https://www.flickr.com/photos/hubble_esa/10953173335/">ESA/Hubble &amp; NASA</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>)</li>
+<li><b>luhman16</b>: <a href="https://commons.wikimedia.org/w/index.php?curid=192765943">ESO VLT/MUSE; processing Melina Thévenot</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>)</li>
+<li><b>proxima</b>: <a href="https://commons.wikimedia.org/w/index.php?curid=29263039">ESA/Hubble &amp; NASA</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>)</li>
+<li><b>crab</b>: <a href="https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-1/">NASA, ESA (Hubble)</a></li>
+<li><b>sn1987a</b>: NASA, ESA, A. Angelich (NRAO/AUI/NSF); Hubble: R. Kirshner; Chandra: NASA/CXC/Penn State/K. Frank et al.; ALMA (ESO/NAOJ/NRAO), R. Indebetouw</li>
+<li><b>mira</b>: <a href="https://commons.wikimedia.org/w/index.php?curid=194203906">ESO</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>)</li>
+<li><b>betelgeuse</b>: <a href="https://commons.wikimedia.org/w/index.php?curid=198070819">ESO</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>)</li>
+<li><b>sgra</b>: <a href="https://commons.wikimedia.org/w/index.php?curid=117933557">EHT Collaboration / ESO</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>)</li>
+<li><b>tabby</b>: <a href="https://science.nasa.gov/photojournal/tabbys-star-illustration/">NASA/JPL-Caltech — artist&#x27;s illustration</a></li>
+<li><b>casa</b>: NASA and The Hubble Heritage Team (STScI/AURA); ack. R. Fesen &amp; J. Morse</li>
+<li><b>barnard</b>: our own figure — AllWISE 2010 vs SPHEREx 2026 from NASA/IPAC IRSA (made by <code>python main.py --figure</code>).</li></ul><p class='muted'>NASA images are not copyrighted in the US (NASA media guidelines); ESA/Hubble, ESA/Webb and ESO images are CC BY 4.0 with the credit shown.</p>
+  
+  <p><b>Fonts.</b> Archivo, Instrument Serif, Manrope, Space Mono, Caveat — Google Fonts, SIL Open Font License 1.1.</p>
+  <h2 id="licence"><small>11</small>Licence</h2>
+  <p><b>Code.</b> © 2026 Team ORBITAL, MIT licence (see <code>LICENSE</code>). The licence covers our code only, not the data, papers or images above;
+    each keeps its own terms.</p>
+  <p class="muted">Student project for the NASA Space Apps Challenge 2026. Not an official NASA product, and not endorsed by NASA, ESA, CDS,
+    GAVO, JPL or any data provider. Found something we should credit and did not? Tell us and we will add it.</p>
+  <p><a href="science.html">← Back to Science notes</a></p>
+</main>
+
+
+<footer class="footer">
+  <div data-k="footer.team"></div>
+  <div class="muted" data-k="footer.disclaimer"></div>
+</footer>
+<script src="js/config.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/content.js"></script>
+<script src="js/core.js"></script>
+<script src="js/tutorial.js"></script>
+<script src="js/explore.js"></script>
+</body>
+</html>

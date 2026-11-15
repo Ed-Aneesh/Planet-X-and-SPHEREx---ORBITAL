@@ -1,0 +1,46 @@
+/* "How to use ORBITAL" guide (js/tutorial.js). Uses the site tokens from style.css / calm.css. */
+.tut-wrap { position: fixed; inset: 0; z-index: 2000; display: grid; place-items: center; padding: 16px;
+  background: rgba(4, 8, 18, .72); backdrop-filter: blur(4px); animation: tut-in .2s ease-out; }
+.tut-wrap[hidden] { display: none; }
+html.tut-open { overflow: hidden; }
+.tut { width: min(720px, 100%); max-height: calc(100vh - 32px); display: flex; flex-direction: column;
+  background: var(--paper-2, #142038); color: var(--ink, #ece9df); border: 1px solid var(--line);
+  border-radius: 18px; overflow: hidden; box-shadow: 0 30px 80px rgba(0, 0, 0, .5); }
+.tut-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px 12px 26px;
+  background: var(--lav-2, #9fb3f5); color: var(--on-light, #0c1424); }
+.tut-head span { font: 700 .82rem var(--f-mono); letter-spacing: .14em; text-transform: uppercase; }
+.tut-x { width: 32px; height: 32px; border-radius: 50%; border: 2px solid currentColor; background: none;
+  color: inherit; font-size: .9rem; cursor: pointer; line-height: 1; }
+.tut-x:hover, .tut-x:focus-visible { background: rgba(12, 20, 36, .12); outline: none; }
+.tut-body { padding: 24px 32px 8px; overflow-y: auto; }
+.tut-img { aspect-ratio: 16 / 9; border-radius: 10px; overflow: hidden; background: #050a14; border: 1px solid var(--line); }
+.tut-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.tut-img img.top { object-fit: cover; object-position: center top; }
+.tut h2 { font: 800 clamp(1.5rem, 3.4vw, 2rem) var(--f-display, inherit); color: var(--lav, #c9d4fb); margin: 18px 0 8px; }
+.tut-text { font-size: 1.04rem; line-height: 1.6; margin: 0 0 6px; min-height: 6.4em; }
+.tut-text b { color: var(--hi, #e8f36b); font-weight: 700; }
+.tut-foot { display: flex; align-items: center; justify-content: center; gap: 14px; padding: 12px 20px 18px; }
+.tut-dots { display: flex; gap: 12px; }
+.tut-dots button { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--muted, #8f99ab);
+  background: none; padding: 0; cursor: pointer; }
+.tut-dots button.on { background: var(--lav-2, #9fb3f5); border-color: var(--lav, #c9d4fb); box-shadow: 0 0 0 3px rgba(159, 179, 245, .25); }
+.tut-dots button:focus-visible { outline: 2px solid var(--hi); outline-offset: 2px; }
+.tut-nav { width: 36px; height: 36px; border: 0; background: none; color: var(--ink); font-size: 1.8rem; line-height: 1;
+  cursor: pointer; border-radius: 50%; }
+.tut-nav:hover:not(:disabled), .tut-nav:focus-visible { background: rgba(201, 212, 251, .12); outline: none; }
+.tut-nav:disabled { opacity: .25; cursor: default; }
+.tut-end { display: flex; justify-content: center; padding: 0 20px 20px; margin-top: -6px; }
+.tut-end[hidden] { display: none; }
+.tut-btn span { font-weight: 800; margin-right: 2px; }
+html[data-theme="light"] .tut { background: #fff; color: #0c1424; }
+html[data-theme="light"] .tut h2 { color: #2a54c4; }
+html[data-theme="light"] .tut-text b { color: #17804f; }
+html[data-theme="light"] .tut-nav { color: #0c1424; }
+@keyframes tut-in { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .tut-wrap { animation: none; } }
+@media (max-width: 560px) {
+  .tut-body { padding: 16px 18px 4px; }
+  .tut-dots { gap: 7px; } .tut-dots button { width: 13px; height: 13px; }
+  .tut-text { font-size: .96rem; min-height: 0; }
+  .tut-btn { font-size: 0; padding: 7px 10px; } .tut-btn span { font-size: .95rem; margin: 0; }
+}

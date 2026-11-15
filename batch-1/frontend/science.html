@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f3ee">
+<script>(function(){var t="light";try{if(localStorage.getItem("orbital.theme")==="dark")t="dark"}catch(e){}document.documentElement.dataset.theme=t})()</script>
+<title>Science notes &amp; credits • ORBITAL</title>
+<meta name="description" content="How ORBITAL turns SPHEREx images into trustworthy motion and change: method, validation against Gaia, known limits, credits.">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400..800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/calm.css">
+<link rel="stylesheet" href="css/theme.css">
+<style>
+  .sci { max-width: 940px; margin: 0 auto; padding: 110px 22px 60px; line-height: 1.62; }
+  .sci h1 { font-family: var(--f-display); font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.05; margin: .2em 0 .3em; }
+  .sci h2 { font-family: var(--f-display); font-size: 1.45rem; margin: 2.2em 0 .5em; padding-top: .6em; border-top: 1px solid var(--line); }
+  .sci h2 small { font-family: var(--f-mono); font-size: .7rem; color: var(--muted); margin-right: .7em; font-weight: 400; }
+  .sci p, .sci li { color: var(--ink); max-width: 72ch; }
+  .sci .muted { color: var(--muted); }
+  .sci .lead { font-size: 1.12rem; }
+  .sci .tldr { border: 1px solid var(--line); border-radius: 18px; padding: 16px 20px; background: rgba(201,212,251,.05); }
+  .sci .tldr b { color: var(--hi); }
+  .sci table { width: 100%; border-collapse: collapse; font-size: .86rem; margin: .8em 0; }
+  .sci th, .sci td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  .sci th { font-family: var(--f-mono); font-size: .72rem; color: var(--muted); font-weight: 400; }
+  .sci td.num { font-family: var(--f-mono); white-space: nowrap; }
+  .sci .ok { color: var(--ok); } .sci .warn { color: var(--warn); } .sci .na { color: var(--muted); }
+  .sci .tag { font-family: var(--f-mono); font-size: .68rem; padding: 1px 6px; border-radius: 6px; border: 1px solid var(--line); color: var(--ink); background: transparent; }
+  .sci .wide { overflow-x: auto; }
+  .sci code { font-family: var(--f-mono); font-size: .85em; }
+  .sci .toc { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .86rem; }
+  .sci .toc a, .sci a { color: var(--lav); }
+  html[data-theme="light"] .sci a { color: #2a54c4; }
+  html[data-theme="light"] .sci .tldr b { color: #17804f; }
+  html[data-theme="light"] .sci .tldr { background: #fff; }
+  .sci .fig { margin: 1em 0; }
+  .sci .fig img { width: 100%; max-width: 640px; border-radius: 12px; display: block; }
+  .sci .fig figcaption { font-size: .82rem; color: var(--muted); margin-top: .4em; }
+</style>
+<link rel="stylesheet" href="css/tutorial.css">
+</head>
+<body data-page="science">
+<header class="nav" id="nav">
+  <a class="brand" href="index.html" aria-label="Home"><span data-k="brand"></span>.</a>
+  <nav class="links" id="nav-links"></nav>
+  <div class="nav-right">
+  </div>
+</header>
+
+<main class="sci">
+  <div class="eyebrow">Science notes · method · validation · credits</div>
+  <h1>Can you trust what blinks?</h1>
+  <p class="lead">A blink tool is only useful if a moving dot is really moving and a brightening star is really brightening.
+    This page shows how ORBITAL avoids the traps in SPHEREx data, and checks its own measurements against independent catalogues.</p>
+
+  <div class="tldr">
+    <p><b>In 90 seconds.</b> Every Sky Probe image comes live from NASA/IPAC IRSA (SPHEREx DR1 + QR3). We put older NASA images
+      (2MASS ≈1999, AllWISE ≈2010) on the same pixel grid, so a star's position can be compared over ~27 years instead of one.
+      Measured that way, the motions of the fast-moving challenge targets agree with the Gaia/literature values: all five fast movers (Barnard's Star, Epsilon Indi B, WISE 0855, Luhman 16, Proxima Centauri) come out within 1.2σ of the catalogue on a 16-year AllWISE baseline, and Barnard's Star at 10.6 ± 0.25″/yr against 10.4.
+      We also refuse to call a brightness change "real" unless both frames saw the star at the same wavelength.</p>
+  </div>
+
+  <p class="toc">
+    <a href="#lvf">1 · Same-colour rule</a><a href="#subpix">2 · Sub-pixel motion &amp; the 27-year baseline</a>
+    <a href="#epoch">3 · Epoch propagation</a><a href="#flags">4 · Flags</a><a href="#dichroic">5 · Paired detectors</a>
+    <a href="#asteroids">6 · Known asteroids</a><a href="#validation">7 · Validation table</a><a href="#limits">8 · Known limits</a>
+    <a href="#credits">9 · Credits &amp; licences</a>
+  </p>
+  <p><a class="btn sm primary" href="credits.html">Credits ↗</a>
+    <span class="muted">every dataset, paper, standard, library and image we used, on one page</span></p>
+
+  <h2 id="lvf"><small>01</small>The same-colour rule (linear variable filters)</h2>
+  <p>SPHEREx does not take a picture through one filter. Each of its six detectors (D1–D6, 0.75–5.0 µm) sits under a
+    <b>linear variable filter</b>: a filter whose colour changes smoothly from one edge to the other. So a star's
+    wavelength depends on <i>where on the detector</i> it lands, and that changes from visit to visit (SPHEREx Explanatory Supplement).</p>
+  <p>As a result, two frames can capture the same star at, say, 1.60 µm and 1.75 µm. If that star is redder than its
+    neighbours, it will appear to brighten even when nothing has changed. ORBITAL reads each frame's wavelength at the
+    target from the file's own wavelength table, shows it on every frame, and:</p>
+  <ul>
+    <li>the <b>Same colour only</b> switch plays only frames within 1&nbsp;% in wavelength of the current one;</li>
+    <li>the <b>difference image</b> refuses pairs more than 1&nbsp;% apart and offers the closest matching pair instead.</li>
+  </ul>
+  <p class="muted">Why 1 %: the spectral resolution of D1–D4 is about R ≈ 40 (one resolution element ≈ 2.5 % of λ) ,
+    so 1 % keeps both frames inside one element. This is our choice, not a mission rule.</p>
+
+  <h2 id="subpix"><small>02</small>Sub-pixel motion and the 27-year baseline</h2>
+  <p>A SPHEREx pixel is 6.15″ (arc-seconds; 1″ = 1/3600 of a degree). Barnard's Star, the fastest star in the sky, moves
+    10.4″ per year, so between two SPHEREx visits six months apart it moves less than one pixel. Within SPHEREx alone,
+    almost every star motion is <i>sub-pixel</i>: real, but too small to see by blinking.</p>
+  <p>The fix is time. ORBITAL fetches 2MASS (1997–2001) and AllWISE (2010–11) images of the same patch from IRSA,
+    resamples them onto the SPHEREx grid, and lets you blink 1999 → 2026. Over 27 years Barnard's Star moves ≈ 280″ ≈ 45 pixels.
+    The <b>Measure</b> tool then centroids the star (finds the brightness-weighted centre to a fraction of a pixel) in both
+    images and converts the shift into a proper motion, with an uncertainty budget:</p>
+  <p class="muted"><code>σ = √(2·σ<sub>c</sub>² + (μ·σ<sub>t</sub>)²) / Δt</code>, with σ<sub>c</sub> = 0.3 px per centroid, σ<sub>t</sub> = ±0.3 yr for AllWISE (a stack of 2010–11 scans) and ±0.05 yr for 2MASS. Parallax
+    (the yearly back-and-forth caused by Earth's orbit, up to 0.77″ here) is not removed; over 16–27 years it adds at most 30–50 mas/yr.</p>
+
+  <h2 id="epoch"><small>03</small>Epoch propagation</h2>
+  <p>A catalogue position is true only at its <b>epoch</b> (the date it refers to). For a moving star ORBITAL moves the
+    position to the date of every frame: Δδ = μ<sub>δ</sub>·Δt north and Δα = μ<sub>α*</sub>·Δt / cos δ east
+    (μ<sub>α*</sub> already includes cos δ). That is why the Probe centres Barnard's Star at its 2026
+    position, ~4.5′ from its J2000 one, and why the default search radius grows with the motion
+    (radius = μ × 28 yr + 0.02°: 0.10° for Barnard's Star, 0.08° for WISE 0855) so that both the 1999 and 2026 positions fit.</p>
+
+  <h2 id="flags"><small>04</small>Flags: what the camera says not to trust</h2>
+  <p>Every SPHEREx file carries a FLAGS layer (one bit per problem per pixel). ORBITAL reads the bit names from each file's own
+    header — never hard-coded — and masks transients, overflow, non-linear, hot, cold, persistence, ghosts and similar
+    pixels. Bright stars that saturate are therefore shown as holes, honestly, instead of as fake flat tops. The Flags view
+    lists what was masked per frame.</p>
+
+  <h2 id="dichroic"><small>05</small>Paired detectors</h2>
+  <p>SPHEREx splits the light with a dichroic (a mirror that reflects short wavelengths and passes long ones) so that two
+    detectors look at the same sky at the same moment: D1+D4, D2+D5 and D3+D6. A real moving object is at
+    the same place in both members of a pair at the same time; a cosmic-ray hit appears in only one. Brightness changes
+    between bands of one pair are colour, not time.</p>
+
+  <h2 id="asteroids"><small>06</small>Known asteroids</h2>
+  <p>"Known asteroids" asks NASA/JPL's Small-Body Identification service which catalogued asteroids and comets were in the
+    patch on each SPHEREx date, and moves each one to the exact exposure time with its rates. Units checked live: rates are in arc-seconds per hour, and the RA rate is already on-sky (it includes cos Dec):
+    for 8 asteroids at Dec ≈ +35°, two answers 2 hours apart moved by the rate × 2 h only after the cos Dec scaling
+    (agreement 2.6″ vs 9.8″ without it). Objects whose position error is over 10′ are not drawn.</p>
+
+  <h2 id="validation"><small>07</small>Validation: do we measure what Gaia measures?</h2>
+  <p>We ran the Measure method on all 19 targets with live IRSA data and compared with the catalogue proper motion (Gaia DR3
+    or the literature; WISE 0855 from Luhman &amp; Esplin 2016). Stars that should not move act as a <b>null test</b>: they must
+    come out at ≈ 0. Extended or saturated objects are marked n/a — a centroid means nothing for a nebula.</p>
+  <div class="wide"><table><thead><tr><th>Target</th><th>Older image</th><th>Baseline</th><th>Measured μ<sub>E</sub>, μ<sub>N</sub> (mas/yr)</th><th>Catalogue</th><th>±1σ</th><th>Off by</th><th>Result</th></tr></thead><tbody>
+<tr><td colspan="8" class="muted"><b>Fast movers</b> — the real test</td></tr>
+<tr><td>Barnard's Star<br><span class=muted>red dwarf</span></td><td>AllWISE W1</td><td class=num>2010.5→2026.7 (16.2 yr)</td><td class=num>-493, +10624<br><span class='muted'>10.64″/yr</span></td><td class=num>-803, +10362<br><span class='muted'>10.39″/yr</span></td><td class=num>254</td><td class=num>1.13σ</td><td><span class="ok">✓ agrees</span></td></tr>
+<tr><td>Barnard's Star</td><td>2MASS H</td><td class=num>2000.4→2026.7 (26.3 yr)</td><td class=num>-565, +9840<br><span class='muted'>9.86″/yr</span></td><td class=num>-803, +10362<br><span class='muted'>10.39″/yr</span></td><td class=num>101</td><td class=num>5.68σ</td><td><span class="warn">✗ fails</span><br><span class=muted>saturated in 2MASS (H = 4.8): centroid 3.3 px off</span></td></tr>
+<tr><td>Epsilon Indi B<br><span class=muted>brown-dwarf pair</span></td><td>2MASS K</td><td class=num>2000.5→2026.8 (26.2 yr)</td><td class=num>+3943, -2501<br><span class='muted'>4.67″/yr</span></td><td class=num>+3960, -2539<br><span class='muted'>4.70″/yr</span></td><td class=num>100</td><td class=num>0.42σ</td><td><span class="ok">✓ agrees</span></td></tr>
+<tr><td>Epsilon Indi B</td><td>AllWISE W2</td><td class=num>2010.6→2026.8 (16.2 yr)</td><td class=num>+3833, -2574<br><span class='muted'>4.62″/yr</span></td><td class=num>+3960, -2539<br><span class='muted'>4.70″/yr</span></td><td class=num>183</td><td class=num>0.51σ</td><td><span class="ok">✓ agrees</span></td></tr>
+<tr><td>WISE 0855−0714<br><span class=muted>coldest brown dwarf</span></td><td>AllWISE W2</td><td class=num>2010.6→2026.3 (15.7 yr)</td><td class=num>-8221, +795<br><span class='muted'>8.26″/yr</span></td><td class=num>-8124, +673<br><span class='muted'>8.15″/yr</span></td><td class=num>229</td><td class=num>0.48σ</td><td><span class="ok">✓ agrees</span><br><span class=muted>search ±1 px; detected 6× above background</span></td></tr>
+<tr><td>WISE 0855−0714</td><td>2MASS K</td><td class=num>—</td><td class=num>—</td><td class=num>-8124, +673<br><span class='muted'>8.15″/yr</span></td><td class=num>—</td><td class=num>—</td><td><span class="na">n/a</span><br><span class=muted>too faint for 2MASS (expected); the ±3 px search locked onto a neighbour 28″ away</span></td></tr>
+<tr><td>Luhman 16<br><span class=muted>brown-dwarf pair</span></td><td>2MASS K</td><td class=num>1999.4→2026.5 (27.1 yr)</td><td class=num>-2760, +331<br><span class='muted'>2.78″/yr</span></td><td class=num>-2759, +354<br><span class='muted'>2.78″/yr</span></td><td class=num>97</td><td class=num>0.24σ</td><td><span class="ok">✓ agrees</span></td></tr>
+<tr><td>Luhman 16</td><td>AllWISE W2</td><td class=num>2010.5→2026.5 (15.9 yr)</td><td class=num>-2809, +237<br><span class='muted'>2.82″/yr</span></td><td class=num>-2759, +354<br><span class='muted'>2.78″/yr</span></td><td class=num>172</td><td class=num>0.52σ</td><td><span class="ok">✓ agrees</span></td></tr>
+<tr><td>Proxima Centauri<br><span class=muted>red dwarf</span></td><td>2MASS H</td><td class=num>2000.2→2026.6 (26.4 yr)</td><td class=num>-3773, +865<br><span class='muted'>3.87″/yr</span></td><td class=num>-3781, +770<br><span class='muted'>3.86″/yr</span></td><td class=num>99</td><td class=num>0.96σ</td><td><span class="ok">✓ agrees</span></td></tr>
+<tr><td>Proxima Centauri</td><td>AllWISE W1</td><td class=num>2010.4→2026.6 (16.2 yr)</td><td class=num>-3835, +688<br><span class='muted'>3.90″/yr</span></td><td class=num>-3781, +770<br><span class='muted'>3.86″/yr</span></td><td class=num>176</td><td class=num>0.39σ</td><td><span class="ok">✓ agrees</span></td></tr>
+<tr><td colspan="8" class="muted"><b>Null tests</b> — barely-moving point sources should come out near 0 · baseline 26–28 yr</td></tr>
+<tr><td>RW Aurigae<br><span class=muted>T Tauri star</span></td><td>2MASS H</td><td class=num>~27 yr</td><td class=num>+3, -77<br><span class='muted'>0.08″/yr</span></td><td class=num>+3, -27</td><td class=num>97</td><td class=num>0.51σ</td><td><span class="ok">✓ agrees</span></td></tr>
+<tr><td>BL Lacertae<br><span class=muted>blazar</span></td><td>2MASS H</td><td class=num>~27 yr</td><td class=num>+60, -7<br><span class='muted'>0.06″/yr</span></td><td class=num>+0, +0</td><td class=num>100</td><td class=num>0.6σ</td><td><span class="ok">✓ agrees</span></td></tr>
+<tr><td>Tabby's Star<br><span class=muted>F star</span></td><td>2MASS H</td><td class=num>~27 yr</td><td class=num>-24, +16<br><span class='muted'>0.03″/yr</span></td><td class=num>-10, -10</td><td class=num>94</td><td class=num>0.22σ</td><td><span class="ok">✓ agrees</span></td></tr>
+<tr><td>R Draconis<br><span class=muted>Mira variable</span></td><td>2MASS H</td><td class=num>~27 yr</td><td class=num>+3, +238<br><span class='muted'>0.24″/yr</span></td><td class=num>+0, +0</td><td class=num>96</td><td class=num>2.47σ</td><td><span class="warn">⚠ biased</span><br><span class=muted>saturated in both images</span></td></tr>
+<tr><td>WR 140<br><span class=muted>Wolf-Rayet binary</span></td><td>2MASS K</td><td class=num>~27 yr</td><td class=num>-189, -252<br><span class='muted'>0.32″/yr</span></td><td class=num>-4, -2</td><td class=num>95</td><td class=num>3.29σ</td><td><span class="warn">⚠ biased</span><br><span class=muted>saturated in both images</span></td></tr>
+<tr><td>Mira<br><span class=muted>Mira variable</span></td><td>2MASS H</td><td class=num>~27 yr</td><td class=num>+614, +206<br><span class='muted'>0.65″/yr</span></td><td class=num>+9, -237</td><td class=num>94</td><td class=num>8.0σ</td><td><span class="warn">✗ fails</span><br><span class=muted>saturated; SPHEREx centroid 5 px off</span></td></tr>
+<tr><td>3C 273<br><span class=muted>quasar</span></td><td>2MASS J</td><td class=num>~27 yr</td><td class=num>-1780, -121<br><span class='muted'>1.78″/yr</span></td><td class=num>+0, +0</td><td class=num>99</td><td class=num>18.0σ</td><td><span class="warn">✗ fails</span><br><span class=muted>2MASS centroid fell 7.5 px away (wrong source)</span></td></tr>
+<tr><td>SN 1987A<br><span class=muted>supernova, LMC</span></td><td>2MASS K</td><td class=num>~27 yr</td><td class=num>-655, -131<br><span class='muted'>0.67″/yr</span></td><td class=num>+0, +0</td><td class=num>99</td><td class=num>6.8σ</td><td><span class="warn">✗ fails</span><br><span class=muted>faint source in a crowded field</span></td></tr>
+<tr><td colspan="8" class="muted"><b>Not applicable</b> — a centroid means nothing here</td></tr>
+<tr><td>Betelgeuse</td><td colspan=6 class=muted>saturated: a masked hole in SPHEREx, nothing to centroid</td><td><span class="na">n/a</span></td></tr>
+<tr><td>Eta Carinae</td><td colspan=6 class=muted>bright nebula, not a point</td><td><span class="na">n/a</span></td></tr>
+<tr><td>Crab Nebula</td><td colspan=6 class=muted>extended remnant (null result 0.08″/yr, 0.9σ, but not meaningful)</td><td><span class="na">n/a</span></td></tr>
+<tr><td>SN 2023ixf</td><td colspan=6 class=muted>inside galaxy M101: extended</td><td><span class="na">n/a</span></td></tr>
+<tr><td>Cassiopeia A</td><td colspan=6 class=muted>extended remnant</td><td><span class="na">n/a</span></td></tr>
+<tr><td>Sagittarius A*</td><td colspan=6 class=muted>not a visible point source at these wavelengths; no 2MASS frame returned</td><td><span class="na">n/a</span></td></tr>
+</tbody></table></div>
+  <p class="muted">Live IRSA data, Sky Probe pipeline, 15 Nov 2026. μ<sub>E</sub> = east motion on the sky (includes cos Dec), μ<sub>N</sub> = north; mas/yr = milliarcseconds per year. ‘Off by’ = distance between measured and catalogue vectors in units of the per-axis σ. Catalogue values: SIMBAD (Gaia DR3 where available); WISE 0855: Luhman &amp; Esplin 2016. σ assumes 0.3 px per centroid plus the older image's date (AllWISE ±0.3 yr). What fails, fails for a reason you can see: saturated cores and wrong-source centroids. That is why the Measure tool snaps only near your click and says which frame it used.</p>
+  <p>An <b>independent check</b> repeats this with a completely separate chain: the raw floating-point FITS files (no
+    display stretch), each file's own WCS (the header formulas from pixel to sky, including SPHEREx's distortion terms,
+    via astropy) and a 2-D Gaussian fit. Run it yourself: <code>python main.py --validate</code> (results in
+    <code>backend/data/validation_astropy.json</code>).</p>
+
+  <h2 id="limits"><small>08</small>Known limits (what we do not claim)</h2>
+  <ul>
+    <li><b>Proper motions are a check, not new science.</b> Gaia measures them ~100× better. Our point: SPHEREx data plus
+      older NASA surveys reproduce them, in a browser, for anyone.</li>
+    <li><b>Centroids are measured on display images</b> (8-bit, stretched) in the browser. Saturated cores (Mira, Betelgeuse,
+      R Dra) bias them; the astropy check above uses the raw data.</li>
+    <li><b>Parallax is not modelled</b> (≤ 0.77″, a ≤ 50 mas/yr effect over our baselines).</li>
+    <li><b>Brightness across missions is not comparable.</b> 2MASS, WISE and SPHEREx have different filters and scales; we
+      compare positions across missions, brightness only within SPHEREx at matched wavelength.</li>
+    <li><b>Deep fields:</b> the Probe searches the DR1 and QR3 collections (at the north ecliptic pole: 439 + 232 images per
+      band set). IRSA also publishes a separate <code>spherex_dr1_deep</code> collection (≥ 20,000 entries there) that we do not
+      yet search.</li>
+    <li><b>Star Vault</b> uses a fixed copy of IRSA files cut ~3′ around each target, so long-baseline blinks of fast movers
+      need the Sky Probe.</li>
+    <li><b>Asteroid predictions</b> are JPL's fast two-body positions; error bars are shown when over 1 pixel.</li>
+  </ul>
+
+  <h2 id="credits"><small>09</small>Credits &amp; licences</h2>
+  <div class="tldr"><p><b>This section is the short version.</b> The full list — 6 required acknowledgements and 66 sources
+    (10 datasets and releases, 15 archive services, 9 SPHEREx papers, 18 methods papers, 4 target-science sources, 2 standards,
+    6 software credits, 2 inspiration sources) plus the 14 photo credits below — is on the Credits page.</p>
+    <p><a class="btn sm primary" href="credits.html">Open all credits ↗</a></p></div>
+  <p><b>SPHEREx.</b> This work uses data from the Spectro-Photometer for the History of the Universe, Epoch of Reionization and
+    Ices Explorer (SPHEREx), a NASA mission managed by JPL/Caltech, obtained from the NASA/IPAC Infrared Science Archive (IRSA),
+    operated by the California Institute of Technology under contract with NASA. Data: SPHEREx DR1,
+    <a href="https://doi.org/10.26131/IRSA678">doi:10.26131/IRSA678</a>; SPHEREx Quick Release 3,
+    <a href="https://doi.org/10.26131/IRSA662">doi:10.26131/IRSA662</a>.</p>
+  <p><b>2MASS.</b> This publication makes use of data products from the Two Micron All Sky Survey, a joint project of the
+    University of Massachusetts and IPAC/Caltech, funded by NASA and the NSF.</p>
+  <p><b>WISE / AllWISE.</b> This publication makes use of data products from the Wide-field Infrared Survey Explorer, a joint
+    project of UCLA and JPL/Caltech, funded by NASA.</p>
+  <p><b>Gaia.</b> This work has made use of data from the European Space Agency (ESA) mission Gaia
+    (<a href="https://www.cosmos.esa.int/gaia">cosmos.esa.int/gaia</a>), processed by the Gaia Data Processing and Analysis
+    Consortium (DPAC). Credit: ESA/Gaia/DPAC.</p>
+  <p><b>JPL.</b> Known-asteroid positions: NASA/JPL Solar System Dynamics, Small-Body Identification API
+    (<a href="https://ssd-api.jpl.nasa.gov/doc/sb_ident.html">ssd-api.jpl.nasa.gov</a>).</p>
+  <p><b>Sky atlas.</b> Aladin Lite (Boch &amp; Fernique 2014; Bonnarel et al. 2000), CDS, Strasbourg Astronomical Observatory,
+    France — shipped with the site under LGPL-3.0. HiPS surveys shown in it carry their own credits (shown in the viewer).</p>
+  <p><b>Fonts.</b> Archivo, Instrument Serif, Manrope, Space Mono, Caveat — Google Fonts, SIL Open Font License 1.1.</p>
+  <p><b>Target photographs — 14 image credits</b> (home page and Star Vault, labelled "Not SPHEREx"). These are only the pictures; data, papers and software are on the <a href="credits.html">Credits page</a>:</p>
+  <ul class='muted'><li><b>wise0855</b>: <a href="https://commons.wikimedia.org/w/index.php?curid=149159405">NASA/ESA/CSA JWST NIRCam; Alves de Oliveira et al.; processing Melina Thévenot</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>)</li>
+<li><b>wr140</b>: <a href="https://esawebb.org/images/weic2307d/">ESA/Webb, NASA, CSA</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>)</li>
+<li><b>etacar</b>: <a href="https://science.nasa.gov/image-detail/stsci-h-p1918a-f-2000x2000-1/">NASA, ESA (Hubble)</a></li>
+<li><b>3c273</b>: <a href="https://www.flickr.com/photos/hubble_esa/10953173335/">ESA/Hubble &amp; NASA</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>)</li>
+<li><b>luhman16</b>: <a href="https://commons.wikimedia.org/w/index.php?curid=192765943">ESO VLT/MUSE; processing Melina Thévenot</a> (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>)</li>
+<li><b>proxima</b>: <a href="https://commons.wikimedia.org/w/index.php?curid=29263039">ESA/Hubble &amp; NASA</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>)</li>
+<li><b>crab</b>: <a href="https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-1/">NASA, ESA (Hubble)</a></li>
+<li><b>sn1987a</b>: NASA, ESA, A. Angelich (NRAO/AUI/NSF); Hubble: R. Kirshner; Chandra: NASA/CXC/Penn State/K. Frank et al.; ALMA (ESO/NAOJ/NRAO), R. Indebetouw</li>
+<li><b>mira</b>: <a href="https://commons.wikimedia.org/w/index.php?curid=194203906">ESO</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>)</li>
+<li><b>betelgeuse</b>: <a href="https://commons.wikimedia.org/w/index.php?curid=198070819">ESO</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>)</li>
+<li><b>sgra</b>: <a href="https://commons.wikimedia.org/w/index.php?curid=117933557">EHT Collaboration / ESO</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>)</li>
+<li><b>tabby</b>: <a href="https://science.nasa.gov/photojournal/tabbys-star-illustration/">NASA/JPL-Caltech — artist&#x27;s illustration</a></li>
+<li><b>casa</b>: NASA and The Hubble Heritage Team (STScI/AURA); ack. R. Fesen &amp; J. Morse</li>
+<li><b>barnard</b>: our own figure — AllWISE 2010 vs SPHEREx 2026 from NASA/IPAC IRSA (made by <code>python main.py --figure</code>).</li></ul><p class='muted'>NASA images are not copyrighted in the US (NASA media guidelines); ESA/Hubble, ESA/Webb and ESO images are CC BY 4.0 with the credit shown.</p>
+  <p><b>Code.</b> © 2026 Team ORBITAL, MIT licence (see <code>LICENSE</code>). The licence covers our code only, not the data or images above.</p>
+  <p class="muted">Student project for the NASA Space Apps Challenge 2026. Not an official NASA product, and not endorsed by NASA, ESA, CDS or any data provider.</p>
+</main>
+
+<footer class="footer">
+  <div data-k="footer.team"></div>
+  <div class="muted" data-k="footer.disclaimer"></div>
+</footer>
+<script src="js/config.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/content.js"></script>
+<script src="js/core.js"></script>
+<script src="js/tutorial.js"></script>
+<script src="js/explore.js"></script>
+</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f3ee">
+<script>(function(){var t="light";try{if(localStorage.getItem("orbital.theme")==="dark")t="dark"}catch(e){}document.documentElement.dataset.theme=t})()</script>
+
+<title>ORBITAL • SPHEREx Time Explorer</title>
+<meta name="description" content="Watch the infrared sky change: a time-lapse explorer for NASA SPHEREx images.">
+<link rel="icon" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Caveat:wght@600;700&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400..800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/calm.css">
+<link rel="stylesheet" href="css/theme.css">
+<!-- Aladin Lite v3 (CDS sky atlas viewer) -->
+<!-- Aladin Lite 3.8.2 (CDS Strasbourg, LGPL-3.0), shipped with the site: CDS removed the old
+     api/v3/latest address in Nov 2026, so we never depend on a URL we don't control. -->
+<script type="module">
+  import A from "./vendor/aladin-lite-3.8.2.js";
+  window.A = A;
+  window.dispatchEvent(new Event("aladin-ready"));
+</script>
+<link rel="stylesheet" href="css/tutorial.css">
+</head>
+<body data-page="home">
+
+<!-- ===== Navigation ===== -->
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="Back to top"><span data-k="brand"></span>.</a>
+  <nav class="links" id="nav-links"></nav>
+  <div class="nav-right">
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="home">
+    <div class="eyebrow" data-k="hero.eyebrow"></div>
+    <h1>
+      <span data-k="hero.line1"></span><br>
+      <span class="serif" data-k="hero.line2Prefix"></span>
+      <span class="circled"><span class="accent" id="rotator"></span><svg viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true"><path d="M44 20 C118 2 252 6 288 42 C312 72 206 97 112 93 C34 89 2 64 16 40 C28 22 88 10 168 12"/></svg></span>
+    </h1>
+    <p class="lead" data-k="hero.subtitle"></p>
+    <div class="stats" id="hero-stats"></div>
+
+    <div class="hero-art" aria-hidden="true">
+      <div class="hero-rule"></div>
+      <svg class="scene" viewBox="0 0 1200 440" role="img">
+        <!-- lithograph flat shapes -->
+        <circle class="flat-sky" cx="110" cy="420" r="92"/>
+        <circle class="ln" cx="110" cy="420" r="92"/>
+        <ellipse class="ln thin" cx="110" cy="410" rx="150" ry="26" transform="rotate(-12 110 410)"/>
+        <circle class="flat-rust" cx="1118" cy="78" r="28"/>
+        <!-- lavender orbit loop -->
+        <path class="lav" d="M300 238 C330 130 880 120 905 214 C930 300 560 330 420 292 C350 272 330 250 352 232"/>
+        <!-- SPHEREx: three nested photon-shield cones over the spacecraft bus (line art) -->
+        <ellipse class="ln" cx="600" cy="74" rx="182" ry="24"/>
+        <path class="ln" d="M418 74 L560 236 M782 74 L640 236"/>
+        <ellipse class="ln thin" cx="600" cy="110" rx="140" ry="18"/>
+        <ellipse class="ln thin" cx="600" cy="146" rx="98" ry="13"/>
+        <path class="ln thin dash" d="M600 92 L600 230"/>
+        <rect class="ln" x="552" y="236" width="96" height="70" rx="8"/>
+        <path class="ln thin" d="M552 262 H648 M584 236 V306 M616 236 V306"/>
+        <rect class="flat-ink" x="458" y="318" width="284" height="26" rx="4"/>
+        <path d="M494 318 V344 M530 318 V344 M566 318 V344 M602 318 V344 M638 318 V344 M674 318 V344 M710 318 V344" class="on-bg"/>
+        <path class="ln thin" d="M600 306 V318"/>
+        <!-- BLINK: two frames, same stars, one dot jumped -->
+        <path class="hi" d="M96 116 L262 98"/>
+        <text class="hand on-hi" x="104" y="112" transform="rotate(-6 104 112)">BLINK</text>
+        <rect class="ln" x="86" y="150" width="104" height="104" rx="10" transform="rotate(-7 138 202)"/>
+        <rect class="ln" x="212" y="140" width="104" height="104" rx="10" transform="rotate(5 264 192)"/>
+        <circle class="flat-ink" cx="118" cy="188" r="5"/><circle class="flat-ink" cx="160" cy="226" r="4"/><circle class="flat-rust" cx="146" cy="200" r="7"/>
+        <circle class="flat-ink" cx="244" cy="176" r="5"/><circle class="flat-ink" cx="286" cy="214" r="4"/><circle class="flat-rust" cx="282" cy="180" r="7"/>
+        <path class="ln thin dash" d="M326 196 C370 196 390 240 440 250"/>
+        <path class="ln thin" d="M430 240 L442 251 L428 260"/>
+        <!-- MOVES: a star walking along its proper-motion track -->
+        <text class="hand" x="900" y="112" transform="rotate(4 900 112)">MOVES</text>
+        <path class="ln thin dash" d="M880 160 L1088 232"/>
+        <circle cx="900" cy="167" r="5" class="dotc" opacity=".25"/><circle cx="950" cy="184" r="5" class="dotc" opacity=".45"/>
+        <circle cx="1000" cy="202" r="6" class="dotc" opacity=".7"/><circle class="flat-rust" cx="1052" cy="220" r="8"/>
+        <path class="ln thin" d="M1076 216 L1092 233 L1070 240"/>
+        <!-- VARIES: a star that breathes -->
+        <text class="hand" x="930" y="318" transform="rotate(-3 930 318)">VARIES</text>
+        <path class="ln" d="M920 372 l0 -14 m0 28 l0 -14 m-12 0 h24"/>
+        <path class="ln" d="M1000 378 l0 -26 m0 52 l0 -26 m-24 0 h48 m-40 -18 l32 36 m0 -36 l-32 36"/>
+        <path class="ln" d="M1084 374 l0 -16 m0 32 l0 -16 m-14 0 h28"/>
+        <!-- scribble stars -->
+        <path class="ln thin" d="M380 60 l0 18 m-9 -9 h18"/><path class="ln thin" d="M820 330 l0 14 m-7 -7 h14"/>
+        <path class="ln thin" d="M260 330 l0 16 m-8 -8 h16"/><path class="ln thin" d="M1150 300 l0 12 m-6 -6 h12"/>
+      </svg>
+    </div>
+    <div class="action-pill">
+      <b>Pick a star. Watch it change.</b>
+      <div class="cta-row">
+        <a class="btn ghost" href="#pipeline"><span data-k="hero.secondaryCta"></span></a>
+        <a class="btn primary" id="hero-primary" href="vault.html"><span data-k="hero.primaryCta"></span> ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="starfield" id="starfield" aria-hidden="true"></div>
+
+  <!-- ===== 00 DOORS ===== -->
+  <section class="sec" id="doors">
+    <div class="sec-head">
+      <div class="sec-label"><span data-k="portals.num"></span> // <span data-k="portals.label"></span></div>
+      <h2 data-k="portals.title"></h2>
+      <p class="body" data-k="portals.text"></p>
+    </div>
+    <div class="door-cards">
+      <article class="dcard" id="door-vault">
+        <div class="d-head" id="door-vault-art"></div>
+        <div class="d-body">
+          <span class="d-ic">✦</span>
+          <h3>Star Vault</h3>
+          <p class="d-tagline">19 hand-picked objects that move, flicker or exploded.</p>
+          <ul class="arrows"><li>The 5 NASA challenge targets</li><li>Nearest stars &amp; brown dwarfs</li><li>Supernovae, quasars &amp; a black hole</li></ul>
+          <a class="btn go-btn" href="vault.html">Open the Vault ↗</a>
+        </div>
+      </article>
+      <article class="dcard" id="door-probe">
+        <div class="d-head probe-head" id="door-probe-art"></div>
+        <div class="d-body">
+          <span class="d-ic probe-ic">⌖</span>
+          <h3>Sky Probe</h3>
+          <p class="d-tagline">Any right ascension and declination. Your patch of sky, through time.</p>
+          <ul class="arrows"><li>Degrees or hours/minutes/seconds</li><li>Click anywhere on a sky map</li><li>Choose your cutout size</li></ul>
+          <a class="btn outline-btn" href="probe.html">Launch the Probe ↗</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== 01 IDEA + TRY IT ===== -->
+  <section class="sec" id="idea">
+    <div class="sec-head">
+      <div class="sec-label"><span data-k="sections.idea.num"></span> // <span data-k="sections.idea.label"></span></div>
+      <h2 data-k="sections.idea.title"></h2>
+    </div>
+    <div class="idea-grid">
+      <div class="idea-left">
+        <p class="idea-lead">In 1930 Clyde Tombaugh found Pluto by <mark class="hl">flipping between two photos of the same star field</mark> — a <span class="term" tabindex="0" data-def="A machine that flips quickly between two photographic plates of the same sky, so anything that moved or changed jumps out.">blink comparator</span>. Thousands of stars stayed still; <mark class="hl">one dot jumped</mark>. ORBITAL does the same thing with modern data: it pulls every <span class="term" tabindex="0" data-def="A small square cropped from a full SPHEREx image around your position, so only the part you need is downloaded.">cutout</span> SPHEREx has taken at your position, lines them up on the same <span class="term" tabindex="0" data-def="World Coordinate System: the formula in each image's header that turns pixel positions into sky positions (RA, Dec).">WCS</span> grid, and <mark class="hl">plays them in time order</mark>.</p>
+        <div class="opts">
+          <div class="opt"><span class="o-ic"></span><p><b>Moving</b> dots = nearby stars and brown dwarfs with large <span class="term" tabindex="0" data-def="A star's real sideways drift across the sky, measured in arcseconds per year.">proper motion</span>.</p></div>
+          <div class="opt"><span class="o-ic"></span><p><b>Pulsing</b> dots = variable stars whose brightness changes.</p></div>
+          <div class="opt"><span class="o-ic"></span><p><b>Everything else</b> stays fixed — that's what makes the odd one out obvious.</p></div>
+        </div>
+      </div>
+      <div class="card try-card">
+        <div class="try-top"><b>Try it — hover the sky</b><span class="badge-sim mono">Simulated illustration · not SPHEREx data</span></div>
+        <div class="try-stage">
+          <canvas id="try-canvas" width="960" height="600" aria-label="Simulated star field"></canvas>
+          <div class="try-hud mono" id="try-hud">VISIT 4 / 6</div>
+        </div>
+        <div class="try-controls">
+          <button class="btn go-btn sm" id="try-play" type="button">❚❚ Pause</button>
+          <button class="btn sm outline-btn" id="try-prev" type="button" aria-label="Previous visit">←</button>
+          <button class="btn sm outline-btn" id="try-next" type="button" aria-label="Next visit">→</button>
+          <label class="switch"><input type="checkbox" id="try-trail"><span class="sw"></span> Motion trail</label>
+          <div class="try-dots" id="try-dots"></div>
+        </div>
+        <small class="muted" id="try-probe" data-idle="Hover to probe · the big pixels mimic SPHEREx's 6.15″ resolution">Hover to probe · the big pixels mimic SPHEREx's 6.15″ resolution</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 02 PIPELINE ===== -->
+  <section class="sec" id="pipeline">
+    <div class="sec-head">
+      <div class="sec-label"><span data-k="sections.pipeline.num"></span> // <span data-k="sections.pipeline.label"></span></div>
+      <h2 data-k="sections.pipeline.title"></h2>
+      <p class="body" data-k="sections.pipeline.text"></p>
+    </div>
+    <ol class="pipeline" id="pipeline-steps"></ol>
+  </section>
+
+  <!-- ===== 03 TARGETS (revolving carousel + fun facts) ===== -->
+  <section class="sec" id="targets">
+    <div class="sec-head">
+      <div class="sec-label"><span data-k="sections.targets.num"></span> // <span data-k="sections.targets.label"></span></div>
+      <h2 data-k="sections.targets.title"></h2>
+      <p class="body" data-k="sections.targets.text"></p>
+    </div>
+    <div class="tg-grid">
+      <div class="carousel">
+        <div class="c-stage" id="c-stage"><div class="c-ring" id="c-ring"></div></div>
+        <div class="c-bar">
+          <button class="btn sm outline-btn" id="c-prev" type="button" aria-label="Previous target">←</button>
+          <span class="mono c-theta">θ = <b id="c-angle">0°</b></span>
+          <button class="btn sm outline-btn" id="c-auto" type="button">AUTO</button>
+          <button class="btn sm outline-btn" id="c-next" type="button" aria-label="Next target">→</button>
+        </div>
+        <div class="c-jump" id="c-jump"></div>
+      </div>
+      <div class="card c-detail" id="c-detail"></div>
+    </div>
+  </section>
+
+  <!-- ===== 04 SPECTRUM ===== -->
+  <section class="sec" id="spectrum">
+    <div class="sec-head">
+      <div class="sec-label"><span data-k="sections.spectrum.num"></span> // <span data-k="sections.spectrum.label"></span></div>
+      <h2 data-k="sections.spectrum.title"></h2>
+      <p class="body" data-k="sections.spectrum.text"></p>
+    </div>
+    <div class="card">
+      <div class="spec-readout">
+        <div><span class="mono muted">WAVELENGTH</span> <b class="mono" id="spec-lambda">— µm</b></div>
+        <div><span class="mono muted">DETECTOR</span> <b class="mono" id="spec-band">—</b></div>
+        <div><span class="mono muted">CHANNEL</span> <b class="mono" id="spec-ch">—</b> <small class="mono muted" id="spec-R"></small></div>
+        <div id="spec-explain">Move your cursor (or tap) across the band ↓</div>
+      </div>
+      <div class="spec-bar" id="spec-bar">
+        <div class="spec-bands" id="spec-bands"></div>
+        <div class="spec-features" id="spec-features"></div>
+        <div class="spec-cursor" id="spec-cursor"></div>
+      </div>
+      <div class="spec-ticks mono" id="spec-ticks"></div>
+      <small class="muted" data-k="sections.spectrum.note"></small>
+    </div>
+  </section>
+
+  <!-- ===== 05 TOOLS ===== -->
+  <section class="sec" id="tools">
+    <div class="sec-head">
+      <div class="sec-label"><span data-k="sections.tools.num"></span> // <span data-k="sections.tools.label"></span></div>
+      <h2 data-k="sections.tools.title"></h2>
+    </div>
+    <div class="grid-3" id="tools-grid"></div>
+  </section>
+
+  <!-- ===== 06 COMPARE ===== -->
+  <section class="sec" id="compare">
+    <div class="sec-head">
+      <div class="sec-label"><span data-k="sections.compare.num"></span> // <span data-k="sections.compare.label"></span></div>
+      <h2 data-k="sections.compare.title"></h2>
+      <p class="body" data-k="sections.compare.text"></p>
+    </div>
+    <div class="card table-wrap"><table class="compare" id="compare-table"></table></div>
+    <small class="muted" data-k="compare.note"></small>
+  </section>
+
+  <!-- ===== 07 GLOSSARY ===== -->
+  <section class="sec gloss-sec" id="glossary">
+    <!-- The whole glossary folds into one row; open it with the chevron (or the nav link). -->
+    <button class="gloss-head" id="gloss-toggle" type="button" aria-expanded="false" aria-controls="gloss-body">
+      <span class="sec-head">
+        <span class="sec-label"><span data-k="sections.glossary.num"></span> // <span data-k="sections.glossary.label"></span></span>
+        <h2 data-k="sections.glossary.title"></h2>
+        <span class="body" data-k="sections.glossary.text"></span>
+      </span>
+      <span class="gloss-chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span>
+    </button>
+    <div class="gloss-teaser" id="gloss-teaser" aria-hidden="true"></div>
+    <div class="gloss-body" id="gloss-body" hidden>
+      <div class="gloss-bar">
+        <div class="search"><span>⌕</span><input id="gloss-search" type="search" autocomplete="off" placeholder="Search terms… e.g. WCS, epoch"></div>
+        <button class="btn sm ghost" id="gloss-random" type="button">✦ Surprise me</button>
+        <span class="muted mono" id="gloss-count"></span>
+      </div>
+      <nav class="gloss-az" id="gloss-az" aria-label="Jump to letter"></nav>
+      <div class="gloss-split">
+        <div class="gloss-cloud" id="gloss-grid" role="listbox" aria-label="Terms"></div>
+        <article class="gloss-card" id="gloss-card" aria-live="polite"></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SCIENCE & CREDITS (after the glossary) ===== -->
+  <section class="sec sci-cta-sec" id="science">
+    <a class="sci-cta" href="science.html">
+      <span class="sci-cta-ic" aria-hidden="true">σ</span>
+      <span class="sci-cta-txt"><span class="mono muted">08 // SCIENCE &amp; CREDITS</span>
+        <b>Can you trust what blinks?</b>
+        <span>How we checked every number: the motions of all 19 targets measured against Gaia, the same-colour rule,
+          known limits, and full credits for every image and data set.</span></span>
+      <span class="btn primary sci-cta-btn">Read the science notes ↗</span>
+    </a>
+  </section>
+
+  <!-- ===== LAUNCH CTA ===== -->
+  <section class="sec" id="launch">
+    <div class="card center">
+      <h2 data-k="sections.launch.title"></h2>
+      <p class="body" data-k="sections.launch.text"></p>
+      <div class="cta-row center">
+        <a class="btn primary" id="launch-btn" href="vault.html"><span data-k="sections.launch.cta"></span> ↗</a>
+        <a class="btn ghost" href="probe.html">⌖ <span data-k="portals.probe.cta"></span></a>
+        <a class="btn ghost" href="#top"><span data-k="sections.launch.secondary"></span></a>
+      </div>
+      <small class="muted mono" data-k="launchNote"></small>
+      <p class="mono" id="backend-status"></p>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div data-k="footer.team"></div>
+  <div class="muted" data-k="footer.credits"></div>
+  <div class="muted" data-k="footer.disclaimer"></div>
+</footer>
+
+<!-- content.js = editable text. core.js = shared helpers. Order matters. -->
+<script src="js/config.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/content.js"></script>
+<script src="js/core.js"></script>
+<script src="js/decor.js"></script>
+<script src="js/api.js"></script>
+<script src="js/player.js"></script>
+<script src="js/schematic.js"></script>
+<script src="js/facts.js"></script>
+<script src="js/skymap.js"></script>
+<script src="js/homeviz.js"></script>
+<script src="js/home.js"></script>
+<script src="js/reveal.js"></script>
+<script src="js/tutorial.js"></script>
+<script src="js/explore.js"></script>
+</body>
+</html>

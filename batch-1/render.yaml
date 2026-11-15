@@ -1,0 +1,22 @@
+# Render "Blueprint": tells render.com how to run ORBITAL 24/7.
+# Put this file at the ROOT of the GitHub repo (next to backend/ and frontend/).
+# Render dashboard -> New -> Blueprint -> pick the repo. Full steps: DEPLOY.md
+services:
+  - type: web
+    name: orbital-spherex
+    runtime: python
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: python backend/main.py
+    healthCheckPath: /api/health
+    envVars:
+      - key: HOST
+        value: 0.0.0.0              # listen on the public interface (Render sets PORT itself)
+      - key: ORBITAL_SOURCE
+        value: auto                 # IRSA live first, Google Drive copy if IRSA fails
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: DRIVE_FOLDER_ID        # set in the dashboard, not here
+        sync: false
+      - key: GOOGLE_SERVICE_ACCOUNT_JSON   # paste the WHOLE key JSON in the dashboard. Secret!
+        sync: false
